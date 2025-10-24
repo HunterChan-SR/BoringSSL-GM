@@ -57,7 +57,7 @@ package(
 
 license(
     name = "license",
-    package_name = "BoringSSL-GM",
+    package_name = "BoringSSL",
     # TODO(crbug.com/364634028): Update this once we've aligned with OpenSSL's
     # new license.
     license_kinds = [
