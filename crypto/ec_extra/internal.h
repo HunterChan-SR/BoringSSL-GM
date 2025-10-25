@@ -71,6 +71,25 @@ OPENSSL_EXPORT int ec_hash_to_scalar_p384_xmd_sha512_draft07(
     const uint8_t *msg, size_t msg_len);
 
 
+// 加入sm3-based sm2 (sm2p256v1) RFC9380-compatible SSWU/XMD helpers.
+// Mirrors the XMD-SHA256-SSWU suite but uses SM3 (EVP_sm3()). Reuses
+// P-256's Z = -10 and c2 = sqrt(10) constants already defined above.
+OPENSSL_EXPORT int ec_hash_to_curve_sm2p256v1_xmd_sm3_sswu(const EC_GROUP *group,
+                                           EC_JACOBIAN *out,
+                                           const uint8_t *dst, size_t dst_len,
+                                           const uint8_t *msg, size_t msg_len);
+
+OPENSSL_EXPORT int EC_hash_to_curve_sm2p256v1_xmd_sm3_sswu(const EC_GROUP *group,
+                                           EC_POINT *out,
+                                           const uint8_t *dst, size_t dst_len,
+                                           const uint8_t *msg, size_t msg_len);
+
+OPENSSL_EXPORT int ec_hash_to_scalar_sm2p256v1_xmd_sm3(const EC_GROUP *group,
+                                       EC_SCALAR *out, const uint8_t *dst,
+                                       size_t dst_len, const uint8_t *msg,
+                                       size_t msg_len);
+
+
 #if defined(__cplusplus)
 }  // extern C
 #endif
