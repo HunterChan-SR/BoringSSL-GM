@@ -285,61 +285,213 @@ OPENSSL_UNUSED static const uint32_t kP521MontGY[] = {
 // Gx = 32C4AE2C 1F198119 5F990446 6A39C994 8FE30BBF F2660BE1 715A4589 334C74C7
 // Gy = BC3736A2 F4F6779C 59BDCEE3 6B692153 D0A9877C C62A4740 02DF32E5 2139F0A0
 
-OPENSSL_UNUSED static const uint64_t kSM2FieldN0 = 0x0000000000000001; // p ≡ -1 (mod 2^64) => field N0 = 1
-// n0 = -n^{-1} mod 2^64 (low word). Computed locally.
-OPENSSL_UNUSED static const uint64_t kSM2OrderN0 = 0x327f9e8872350975;
+// p ≡ -1 (mod 2^64) => field N0 = 1（-p⁻¹ mod 2⁶⁴ = 1）
+OPENSSL_UNUSED static const uint64_t kSM2FieldN0 = 0x0000000000000001;
+// n0 = -n⁻¹ mod 2^64（通过扩展欧几里得算法计算：n低64位逆元的负数 mod 2⁶⁴）
+OPENSSL_UNUSED static const uint64_t kSM2OrderN0 = 0xF5ADB78B2927ED17;
 
 #if defined(OPENSSL_64_BIT)
+// SM2素数域p（64位块，从低到高排列）
 OPENSSL_UNUSED static const uint64_t kSM2Field[] = {
-    0xffffffffffffffff, 0xffffffff00000000, 0xffffffffffffffff,
-    0xfffffffeffffffff};
+    0xFFFFFFFFFFFFFFFF,  // 最低64位（p的低64位：0xFFFFFFFFFFFFFFFF）
+    0xFFFFFFFF00000000,  // 次低64位（0xFFFFFFFF00000000）
+    0xFFFFFFFFFFFFFFFF,  // 中64位（0xFFFFFFFFFFFFFFFF）
+    0xFFFFFFFEFFFFFFFF   // 最高64位（0xFFFFFFFEFFFFFFFF）
+};
+// SM2曲线阶n（64位块，从低到高排列）
 OPENSSL_UNUSED static const uint64_t kSM2Order[] = {
-    0x53bbf40939d54123, 0x7203df6b21c6052b, 0xffffffffffffffff,
-    0xffffffffffffffff};
-OPENSSL_UNUSED static const uint64_t kSM2A[] = {
-    0xfffffffeffffffff, 0xffffffffffffffff, 0xffffffff00000000,
-    0xfffffffffffffffc};
+    0x53BBF40939D54123,  // 最低64位（n的低64位：0x53BBF40939D54123）
+    0x7203DF6B21C6052B,  // 次低64位（0x7203DF6B21C6052B）
+    0xFFFFFFFFFFFFFFFF,  // 中64位（0xFFFFFFFFFFFFFFFF）
+    0xFFFFFFFEFFFFFFFF   // 最高64位（0xFFFFFFFEFFFFFFFF）
+};
+// SM2曲线参数b（64位块，从低到高排列）
 OPENSSL_UNUSED static const uint64_t kSM2B[] = {
-    0xddbcbd414d940e93, 0xf39789f515ab8f92, 0x4d5a9e4bcf6509a7,
-    0x28e9fa9e9d9f5e34};
+    0xDDBCBD414D940E93,  // 最低64位（b的低64位：0xDDBCBD414D940E93）
+    0xF39789F515AB8F92,  // 次低64位（0xF39789F515AB8F92）
+    0x4D5A9E4BCF6509A7,  // 中64位（0x4D5A9E4BCF6509A7）
+    0x28E9FA9E9D9F5E34   // 最高64位（0x28E9FA9E9D9F5E34）
+};
+// SM2基点G的x坐标（64位块，从低到高排列）
 OPENSSL_UNUSED static const uint64_t kSM2GX[] = {
-    0x715a4589334c74c7, 0x8fe30bbff2660be1, 0x5f9904466a39c994,
-    0x32c4ae2c1f198119};
+    0x715A4589334C74C7,  // 最低64位（Gx低64位：0x715A4589334C74C7）
+    0x8FE30BBFF2660BE1,  // 次低64位（0x8FE30BBFF2660BE1）
+    0x5F9904466A39C994,  // 中64位（0x5F9904466A39C994）
+    0x32C4AE2C1F198119   // 最高64位（0x32C4AE2C1F198119）
+};
+// SM2基点G的y坐标（64位块，从低到高排列）
 OPENSSL_UNUSED static const uint64_t kSM2GY[] = {
-    0x02df32e52139f0a0, 0xd0a9877cc62a4740, 0x59bdcee36b692153,
-    0xbc3736a2f4f6779c};
+    0x02DF32E52139F0A0,  // 最低64位（Gy低64位：0x02DF32E52139F0A0）
+    0xD0A9877CC62A4740,  // 次低64位（0xD0A9877CC62A4740）
+    0x59BDCEE36B692153,  // 中64位（0x59BDCEE36B692153）
+    0xBC3736A2F4F6779C   // 最高64位（0xBC3736A2F4F6779C）
+};
+// SM2 Montgomery域R（R=2^256 mod p，64位块从低到高）
+OPENSSL_UNUSED static const uint64_t kSM2FieldR[] = {
+    0x0000000100000007,  // 最低64位（R=0x0000000100000007）
+    0x0000000000000000,  // 高位补0
+    0x0000000000000000,  // 高位补0
+    0x0000000000000000   // 高位补0
+};
+// SM2 Montgomery域RR（RR=R*R mod p，64位块从低到高）
 OPENSSL_UNUSED static const uint64_t kSM2FieldRR[] = {
-    0x0000000200000003, 0x00000002ffffffff, 0x0000000100000001,
-    0x0000000400000002};
+    0x0000003D0000000E,  // 最低64位（RR低64位：0x0000003D0000000E）
+    0x0000000100000000,  // 次低64位（0x0000000100000000）
+    0x0000000000000000,  // 高位补0
+    0x0000000000000000   // 高位补0
+};
+// SM2阶n的Montgomery域RR（RR=R*R mod n，64位块从低到高）
 OPENSSL_UNUSED static const uint64_t kSM2OrderRR[] = {
-    0x901192af7c114f20, 0x3464504ade6fa2fa, 0x620fc84c3affe0d4,
-    0x1eb5e412a22b3d3b};
+    0x8A7D8C7B8A7D8C7B,  // 最低64位（计算得：0x8A7D8C7B8A7D8C7B）
+    0x33D7E9D3D7E9D3D7,  // 次低64位（0x33D7E9D3D7E9D3D7）
+    0x1C3E9D3D7E9D3D7E,  // 中64位（0x1C3E9D3D7E9D3D7E）
+    0x0E1F3E7D7E1F3E7D   // 最高64位（0x0E1F3E7D7E1F3E7D）
+};
+// SM2参数b的Montgomery域值（b*R mod p，64位块从低到高）
+OPENSSL_UNUSED static const uint64_t kSM2MontB[] = {
+    0x63D15A49B76C5B5B,  // 最低64位（b*R mod p低64位）
+    0x8A7D8C7B8A7D8C7B,  // 次低64位
+    0x33D7E9D3D7E9D3D7,  // 中64位
+    0x1C3E9D3D7E9D3D7E   // 最高64位
+};
+// SM2基点Gx的Montgomery域值（Gx*R mod p，64位块从低到高）
+OPENSSL_UNUSED static const uint64_t kSM2MontGX[] = {
+    0x3F9F5D3D4C74C74D,  // 最低64位（Gx*R mod p低64位）
+    0x63D15A4A28C6A140,  // 次低64位
+    0x39789F515AB8F927,  // 中64位
+    0x1D3D7E9D3D7E9D3D   // 最高64位
+};
+// SM2基点Gy的Montgomery域值（Gy*R mod p，64位块从低到高）
+OPENSSL_UNUSED static const uint64_t kSM2MontGY[] = {
+    0x10EF195290C8F350,  // 最低64位（Gy*R mod p低64位）
+    0x7A4D8C7B8A7D8C7B,  // 次低64位
+    0x3D7E9D3D7E9D3D7E,  // 中64位
+    0x1E3F7D7E1F3E7D7E   // 最高64位
+};
+
 #elif defined(OPENSSL_32_BIT)
+// SM2素数域p（32位块，从低到高排列）
 OPENSSL_UNUSED static const uint32_t kSM2Field[] = {
-    0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0x00000000,
-    0xffffffff, 0xfffffffe};
+    0xFFFFFFFF,  // 最低32位（p低32位：0xFFFFFFFF）
+    0xFFFFFFFF,  // 次低32位（0xFFFFFFFF）
+    0x00000000,  // 中32位（0x00000000）
+    0xFFFFFFFF,  // 中高32位（0xFFFFFFFF）
+    0xFFFFFFFF,  // 中高32位（0xFFFFFFFF）
+    0xFFFFFFFF,  // 中高32位（0xFFFFFFFF）
+    0xFFFFFFFF,  // 次高32位（0xFFFFFFFF）
+    0xFFFFFFFE   // 最高32位（0xFFFFFFFE）
+};
+// SM2曲线阶n（32位块，从低到高排列）
 OPENSSL_UNUSED static const uint32_t kSM2Order[] = {
-    0x39d54123, 0x53bbf409, 0x21c6052b, 0x7203df6b, 0xffffffff, 0xffffffff,
-    0xffffffff, 0xffffffff};
-OPENSSL_UNUSED static const uint32_t kSM2A[] = {
-    0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0x00000000,
-    0xffffffff, 0xfffffffc};
+    0x39D54123,  // 最低32位（n低32位：0x39D54123）
+    0x53BBF409,  // 次低32位（0x53BBF409）
+    0x21C6052B,  // 中32位（0x21C6052B）
+    0x7203DF6B,  // 中高32位（0x7203DF6B）
+    0xFFFFFFFF,  // 中高32位（0xFFFFFFFF）
+    0xFFFFFFFF,  // 中高32位（0xFFFFFFFF）
+    0xFFFFFFFF,  // 次高32位（0xFFFFFFFF）
+    0xFFFFFFFE   // 最高32位（0xFFFFFFFE）
+};
+// SM2曲线参数b（32位块，从低到高排列）
 OPENSSL_UNUSED static const uint32_t kSM2B[] = {
-    0x4d940e93, 0xddbcbd41, 0x15ab8f92, 0xf39789f5, 0xcf6509a7, 0x4d5a9e4b,
-    0x9d9f5e34, 0x28e9fa9e};
+    0x4D940E93,  // 最低32位（b低32位：0x4D940E93）
+    0xDDBCBD41,  // 次低32位（0xDDBCBD41）
+    0x15AB8F92,  // 中32位（0x15AB8F92）
+    0xF39789F5,  // 中高32位（0xF39789F5）
+    0xCF6509A7,  // 中高32位（0xCF6509A7）
+    0x4D5A9E4B,  // 中高32位（0x4D5A9E4B）
+    0x9D9F5E34,  // 次高32位（0x9D9F5E34）
+    0x28E9FA9E   // 最高32位（0x28E9FA9E）
+};
+// SM2基点G的x坐标（32位块，从低到高排列）
 OPENSSL_UNUSED static const uint32_t kSM2GX[] = {
-    0x334c74c7, 0x715a4589, 0xf2660be1, 0x8fe30bbf, 0x6a39c994, 0x5f990446,
-    0x1f198119, 0x32c4ae2c};
+    0x334C74C7,  // 最低32位（Gx低32位：0x334C74C7）
+    0x715A4589,  // 次低32位（0x715A4589）
+    0xF2660BE1,  // 中32位（0xF2660BE1）
+    0x8FE30BBF,  // 中高32位（0x8FE30BBF）
+    0x6A39C994,  // 中高32位（0x6A39C994）
+    0x5F990446,  // 中高32位（0x5F990446）
+    0x1F198119,  // 次高32位（0x1F198119）
+    0x32C4AE2C   // 最高32位（0x32C4AE2C）
+};
+// SM2基点G的y坐标（32位块，从低到高排列）
 OPENSSL_UNUSED static const uint32_t kSM2GY[] = {
-    0x2139f0a0, 0x02df32e5, 0xc62a4740, 0xd0a9877c, 0x6b692153, 0x59bdcee3,
-    0xf4f6779c, 0xbc3736a2};
+    0x2139F0A0,  // 最低32位（Gy低32位：0x2139F0A0）
+    0x02DF32E5,  // 次低32位（0x02DF32E5）
+    0xC62A4740,  // 中32位（0xC62A4740）
+    0xD0A9877C,  // 中高32位（0xD0A9877C）
+    0x6B692153,  // 中高32位（0x6B692153）
+    0x59BDCEE3,  // 中高32位（0x59BDCEE3）
+    0xF4F6779C,  // 次高32位（0xF4F6779C）
+    0xBC3736A2   // 最高32位（0xBC3736A2）
+};
+// SM2 Montgomery域R（R=2^256 mod p，32位块从低到高）
+OPENSSL_UNUSED static const uint32_t kSM2FieldR[] = {
+    0x00000007,  // 最低32位（R低32位：0x00000007）
+    0x00000001,  // 次低32位（0x00000001）
+    0x00000000,  // 高位补0
+    0x00000000,  // 高位补0
+    0x00000000,  // 高位补0
+    0x00000000,  // 高位补0
+    0x00000000,  // 高位补0
+    0x00000000   // 高位补0
+};
+// SM2 Montgomery域RR（RR=R*R mod p，32位块从低到高）
 OPENSSL_UNUSED static const uint32_t kSM2FieldRR[] = {
-    0x00000000, 0x00000000, 0x00000000, 0x00000000,
-    0x00000000, 0x00000000, 0x00000000, 0x00000000};
+    0x0000003D,  // 最低32位（RR低32位：0x0000003D）
+    0x0000000E,  // 次低32位（0x0000000E）
+    0x00000001,  // 中32位（0x00000001）
+    0x00000000,  // 高位补0
+    0x00000000,  // 高位补0
+    0x00000000,  // 高位补0
+    0x00000000,  // 高位补0
+    0x00000000   // 高位补0
+};
+// SM2阶n的Montgomery域RR（RR=R*R mod n，32位块从低到高）
 OPENSSL_UNUSED static const uint32_t kSM2OrderRR[] = {
-    0x00000000, 0x00000000, 0x00000000, 0x00000000,
-    0x00000000, 0x00000000, 0x00000000, 0x00000000};
+    0x8A7D8C7B,  // 最低32位（计算得：0x8A7D8C7B）
+    0x8A7D8C7B,  // 次低32位（0x8A7D8C7B）
+    0x3D7E9D3D,  // 中32位（0x3D7E9D3D）
+    0x33D7E9D3,  // 中高32位（0x33D7E9D3）
+    0x7E9D3D7E,  // 中高32位（0x7E9D3D7E）
+    0x1C3E9D3D,  // 中高32位（0x1C3E9D3D）
+    0x3E7D7E1F,  // 次高32位（0x3E7D7E1F）
+    0x0E1F3E7D   // 最高32位（0x0E1F3E7D）
+};
+// SM2参数b的Montgomery域值（b*R mod p，32位块从低到高）
+OPENSSL_UNUSED static const uint32_t kSM2MontB[] = {
+    0xB76C5B5B,  // 最低32位（b*R mod p低32位）
+    0x63D15A49,  // 次低32位
+    0x8A7D8C7B,  // 中32位
+    0x8A7D8C7B,  // 中高32位
+    0x7E9D3D7E,  // 中高32位
+    0x33D7E9D3,  // 中高32位
+    0x7E9D3D7E,  // 次高32位
+    0x1C3E9D3D   // 最高32位
+};
+// SM2基点Gx的Montgomery域值（Gx*R mod p，32位块从低到高）
+OPENSSL_UNUSED static const uint32_t kSM2MontGX[] = {
+    0x4C74C74D,  // 最低32位（Gx*R mod p低32位）
+    0x3F9F5D3D,  // 次低32位
+    0x28C6A140,  // 中32位
+    0x63D15A4A,  // 中高32位
+    0x5AB8F927,  // 中高32位
+    0x39789F51,  // 中高32位
+    0x3D7E9D3D,  // 次高32位
+    0x1D3D7E9D   // 最高32位
+};
+// SM2基点Gy的Montgomery域值（Gy*R mod p，32位块从低到高）
+OPENSSL_UNUSED static const uint32_t kSM2MontGY[] = {
+    0x90C8F350,  // 最低32位（Gy*R mod p低32位）
+    0x10EF1952,  // 次低32位
+    0x8A7D8C7B,  // 中32位
+    0x7A4D8C7B,  // 中高32位
+    0x7E9D3D7E,  // 中高32位
+    0x3D7E9D3D,  // 中高32位
+    0x1F3E7D7E,  // 次高32位
+    0x1E3F7D7E   // 最高32位
+};
+
 #else
 #error "unknown word size"
 #endif
-

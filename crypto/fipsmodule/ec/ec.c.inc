@@ -237,7 +237,7 @@ DEFINE_METHOD_FUNCTION(EC_GROUP, EC_group_sm2p256v1) {
                             kSM2Order, kSM2OrderRR, kSM2OrderN0);
 
 #if defined(BORINGSSL_HAS_UINT128) && !defined(OPENSSL_SMALL)
-  out->meth = EC_GFp_nistp256_method();
+  out->meth = EC_GFp_mont_method();
   OPENSSL_memcpy(out->generator.raw.X.words, kSM2GX, sizeof(kSM2GX));
   OPENSSL_memcpy(out->generator.raw.Y.words, kSM2GY, sizeof(kSM2GY));
   out->generator.raw.Z.words[0] = 1;
