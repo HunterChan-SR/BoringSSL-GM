@@ -1488,6 +1488,20 @@ static bool SpeedHashToCurve(const std::string &selected) {
       return false;
     }
     results.Print("hash-to-scalar P384_XMD:SHA-512");
+
+    // 加入ec_hash_to_curve_sm2p256v1_xmd_sm3_sswu的测试
+    if (!TimeFunctionParallel(&results, [&]() -> bool {
+          EC_JACOBIAN out;
+          return ec_hash_to_curve_sm2p256v1_xmd_sm3_sswu(
+              EC_group_sm2p256v1(), &out, kLabel, sizeof(kLabel), input,
+              sizeof(input));
+        })) {
+      fprintf(stderr, "hash-to-curve failed.\n");
+      return false;
+    }
+    results.Print("hash-to-curve SM2P256V1_XMD:SM3_SSWU_RO_");
+
+
   }
 
   return true;

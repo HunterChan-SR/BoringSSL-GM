@@ -544,15 +544,15 @@ int EC_hash_to_curve_sm2p256v1_xmd_sm3_sswu(const EC_GROUP *group,
                                                  msg, msg_len);
 }
 
-int ec_hash_to_scalar_sm2p256v1_xmd_sm3(const EC_GROUP *group,
-                                       EC_SCALAR *out, const uint8_t *dst,
-                                       size_t dst_len, const uint8_t *msg,
-                                       size_t msg_len) {
-  if (EC_GROUP_get_curve_name(group) != NID_sm2p256v1) {
-    OPENSSL_PUT_ERROR(EC, EC_R_GROUP_MISMATCH);
-    return 0;
-  }
+// int ec_hash_to_scalar_sm2p256v1_xmd_sm3(const EC_GROUP *group,
+//                                        EC_SCALAR *out, const uint8_t *dst,
+//                                        size_t dst_len, const uint8_t *msg,
+//                                        size_t msg_len) {
+//   if (EC_GROUP_get_curve_name(group) != NID_sm2p256v1) {
+//     OPENSSL_PUT_ERROR(EC, EC_R_GROUP_MISMATCH);
+//     return 0;
+//   }
 
-  return hash_to_scalar(group, EVP_sm3(), out, dst, dst_len, /*k=*/128, msg,
-                        msg_len);
-}
+//   return hash_to_scalar(group, EVP_sm3(), out, dst, dst_len, /*k=*/128, msg,
+//                         msg_len);
+// }

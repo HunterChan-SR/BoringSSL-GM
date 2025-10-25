@@ -79,15 +79,15 @@ OPENSSL_EXPORT int ec_hash_to_curve_sm2p256v1_xmd_sm3_sswu(const EC_GROUP *group
                                            const uint8_t *dst, size_t dst_len,
                                            const uint8_t *msg, size_t msg_len);
 
-OPENSSL_EXPORT int EC_hash_to_curve_sm2p256v1_xmd_sm3_sswu(const EC_GROUP *group,
-                                           EC_POINT *out,
-                                           const uint8_t *dst, size_t dst_len,
-                                           const uint8_t *msg, size_t msg_len);
+// OPENSSL_EXPORT int EC_hash_to_curve_sm2p256v1_xmd_sm3_sswu(const EC_GROUP *group,
+//                                            EC_POINT *out,
+//                                            const uint8_t *dst, size_t dst_len,
+//                                            const uint8_t *msg, size_t msg_len);
 
-OPENSSL_EXPORT int ec_hash_to_scalar_sm2p256v1_xmd_sm3(const EC_GROUP *group,
-                                       EC_SCALAR *out, const uint8_t *dst,
-                                       size_t dst_len, const uint8_t *msg,
-                                       size_t msg_len);
+// OPENSSL_EXPORT int ec_hash_to_scalar_sm2p256v1_xmd_sm3(const EC_GROUP *group,
+//                                        EC_SCALAR *out, const uint8_t *dst,
+//                                        size_t dst_len, const uint8_t *msg,
+//                                        size_t msg_len);
 
 
 #if defined(__cplusplus)
