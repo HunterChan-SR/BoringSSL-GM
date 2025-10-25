@@ -396,6 +396,12 @@ static const uint8_t kP384Sqrt12[] = {
     0x1f, 0x87, 0x2f, 0xcb, 0x9c, 0xcb, 0x80, 0xc5, 0x3c, 0x0d, 0xe1, 0xf8,
     0xa8, 0x0f, 0x7e, 0x19, 0x14, 0xe2, 0xec, 0x69, 0xf5, 0xa6, 0x26, 0xb3};
 
+//加入sm2
+static const uint8_t kSM2P256Sqrt10[] = {
+    0x22, 0xcc, 0x93, 0xa0, 0x4f, 0x74, 0x2d, 0x49, 0x96, 0x33, 0xe0, 
+    0xf3, 0xa6, 0x0d, 0x22, 0x34, 0x9f, 0xac, 0xce, 0xae, 0xbb, 0xe8,
+    0x34, 0x92,0x26, 0x81, 0x2e, 0x65, 0x43, 0xb1, 0x88, 0x1f};
+
 int ec_hash_to_curve_p256_xmd_sha256_sswu(const EC_GROUP *group,
                                           EC_JACOBIAN *out, const uint8_t *dst,
                                           size_t dst_len, const uint8_t *msg,
@@ -520,10 +526,9 @@ int ec_hash_to_curve_sm2p256v1_xmd_sm3_sswu(const EC_GROUP *group,
     return 0;
   }
 
-  // Z = -10, c2 = sqrt(10) (reuse P-256 constants)
   EC_FELEM Z, c2;
   if (!felem_from_u8(group, &Z, 10) ||
-      !ec_felem_from_bytes(group, &c2, kP256Sqrt10, sizeof(kP256Sqrt10))) {
+      !ec_felem_from_bytes(group, &c2, kSM2P256Sqrt10, sizeof(kSM2P256Sqrt10))) {
     return 0;
   }
   ec_felem_neg(group, &Z, &Z);
