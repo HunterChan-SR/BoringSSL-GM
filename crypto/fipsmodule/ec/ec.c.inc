@@ -483,6 +483,8 @@ const char *EC_curve_nid2nist(int nid) {
       return "P-384";
     case NID_secp521r1:
       return "P-521";
+    case NID_sm2p256v1:
+      return "SM2P-256V1";
   }
   return NULL;
 }
@@ -499,6 +501,9 @@ int EC_curve_nist2nid(const char *name) {
   }
   if (strcmp(name, "P-521") == 0) {
     return NID_secp521r1;
+  }
+  if (strcmp(name, "SM2P-256V1") == 0) {
+    return NID_sm2p256v1;
   }
   return NID_undef;
 }
