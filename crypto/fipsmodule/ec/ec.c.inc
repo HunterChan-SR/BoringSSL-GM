@@ -227,7 +227,7 @@ DEFINE_METHOD_FUNCTION(EC_GROUP, EC_group_p521) {
 // 添加SM2曲线的实现函数
 DEFINE_METHOD_FUNCTION(EC_GROUP, EC_group_sm2p256v1) {
   out->curve_name = NID_sm2p256v1;
-  out->comment = "SM2 curve (SM2P-256V1)";
+  out->comment = "SM2P-256V1";
 
   // OID for SM2 can be added here if desired.
 

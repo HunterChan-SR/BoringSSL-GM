@@ -859,14 +859,16 @@ static bool SpeedECDH(const std::string &selected) {
   return SpeedECDHCurve("ECDH P-224", EC_group_p224(), selected) &&
          SpeedECDHCurve("ECDH P-256", EC_group_p256(), selected) &&
          SpeedECDHCurve("ECDH P-384", EC_group_p384(), selected) &&
-         SpeedECDHCurve("ECDH P-521", EC_group_p521(), selected);
+         SpeedECDHCurve("ECDH P-521", EC_group_p521(), selected) &&
+         SpeedECDHCurve("ECDH SM2 P-256", EC_group_sm2p256v1(), selected);
 }
 
 static bool SpeedECDSA(const std::string &selected) {
   return SpeedECDSACurve("ECDSA P-224", EC_group_p224(), selected) &&
          SpeedECDSACurve("ECDSA P-256", EC_group_p256(), selected) &&
          SpeedECDSACurve("ECDSA P-384", EC_group_p384(), selected) &&
-         SpeedECDSACurve("ECDSA P-521", EC_group_p521(), selected);
+         SpeedECDSACurve("ECDSA P-521", EC_group_p521(), selected) &&
+         SpeedECDSACurve("ECDSA SM2 P-256", EC_group_sm2p256v1(), selected);
 }
 
 static bool Speed25519(const std::string &selected) {

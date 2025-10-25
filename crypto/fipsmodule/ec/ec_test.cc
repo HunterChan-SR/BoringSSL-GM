@@ -1007,6 +1007,9 @@ static const EC_GROUP *GetCurve(FileTest *t, const char *key) {
   if (curve_name == "P-521") {
     return EC_group_p521();
   }
+  if (curve_name == "SM2P-256V1") {
+    return EC_group_sm2p256v1();
+  }
 
   t->PrintLine("Unknown curve '%s'", curve_name.c_str());
   return nullptr;

@@ -400,6 +400,8 @@ UniquePtr<SSLKeyShare> SSLKeyShare::Create(uint16_t group_id) {
       return MakeUnique<ECKeyShare>(EC_group_p384(), SSL_GROUP_SECP384R1);
     case SSL_GROUP_SECP521R1:
       return MakeUnique<ECKeyShare>(EC_group_p521(), SSL_GROUP_SECP521R1);
+    // case SSL_GROUP_SM2P256V1:
+    //   return MakeUnique<ECKeyShare>(EC_group_sm2p256v1(), SSL_GROUP_SM2P256V1);
     case SSL_GROUP_X25519:
       return MakeUnique<X25519KeyShare>();
     case SSL_GROUP_X25519_KYBER768_DRAFT00:
