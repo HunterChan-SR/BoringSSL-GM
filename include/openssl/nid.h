@@ -4264,6 +4264,18 @@ extern "C" {
 #define NID_sm3 966
 #define OBJ_sm3 1L, 2L, 156L, 10197L, 1L, 401L, 1L
 
+/* SM2 曲线与标识 (OID: 1.2.156.10197.1.301) */
+#define SN_sm2 "SM2"
+#define LN_sm2 "sm2"
+#define NID_sm2 967
+#define OBJ_sm2 1L, 2L, 156L, 10197L, 1L, 301L
+
+#define SN_sm2p256v1 "sm2p256v1"
+#define LN_sm2p256v1 "SM2 P-256"
+#define NID_sm2p256v1 968
+#define OBJ_sm2p256v1 1L, 2L, 156L, 10197L, 1L, 301L
+
+
 #if defined(__cplusplus)
 } /* extern C */
 #endif

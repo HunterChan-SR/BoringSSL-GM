@@ -275,3 +275,71 @@ OPENSSL_UNUSED static const uint32_t kP521MontGY[] = {
 #else
 #error "unknown word size"
 #endif
+
+// 添加SM2曲线的常量定义
+// 曲线参数:
+// p = FFFFFFFE FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF 00000000 FFFFFFFF FFFFFFFF
+// a = FFFFFFFE FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF 00000000 FFFFFFFF FFFFFFFC  
+// b = 28E9FA9E 9D9F5E34 4D5A9E4B CF6509A7 F39789F5 15AB8F92 DDBCBD41 4D940E93
+// n = FFFFFFFE FFFFFFFF FFFFFFFF FFFFFFFF 7203DF6B 21C6052B 53BBF409 39D54123
+// Gx = 32C4AE2C 1F198119 5F990446 6A39C994 8FE30BBF F2660BE1 715A4589 334C74C7
+// Gy = BC3736A2 F4F6779C 59BDCEE3 6B692153 D0A9877C C62A4740 02DF32E5 2139F0A0
+
+OPENSSL_UNUSED static const uint64_t kSM2FieldN0 = 0x0000000000000001; // p ≡ -1 (mod 2^64) => field N0 = 1
+// n0 = -n^{-1} mod 2^64 (low word). Computed locally.
+OPENSSL_UNUSED static const uint64_t kSM2OrderN0 = 0x327f9e8872350975;
+
+#if defined(OPENSSL_64_BIT)
+OPENSSL_UNUSED static const uint64_t kSM2Field[] = {
+    0xffffffffffffffff, 0xffffffff00000000, 0xffffffffffffffff,
+    0xfffffffeffffffff};
+OPENSSL_UNUSED static const uint64_t kSM2Order[] = {
+    0x53bbf40939d54123, 0x7203df6b21c6052b, 0xffffffffffffffff,
+    0xffffffffffffffff};
+OPENSSL_UNUSED static const uint64_t kSM2A[] = {
+    0xfffffffeffffffff, 0xffffffffffffffff, 0xffffffff00000000,
+    0xfffffffffffffffc};
+OPENSSL_UNUSED static const uint64_t kSM2B[] = {
+    0xddbcbd414d940e93, 0xf39789f515ab8f92, 0x4d5a9e4bcf6509a7,
+    0x28e9fa9e9d9f5e34};
+OPENSSL_UNUSED static const uint64_t kSM2GX[] = {
+    0x715a4589334c74c7, 0x8fe30bbff2660be1, 0x5f9904466a39c994,
+    0x32c4ae2c1f198119};
+OPENSSL_UNUSED static const uint64_t kSM2GY[] = {
+    0x02df32e52139f0a0, 0xd0a9877cc62a4740, 0x59bdcee36b692153,
+    0xbc3736a2f4f6779c};
+OPENSSL_UNUSED static const uint64_t kSM2FieldRR[] = {
+    0x0000000200000003, 0x00000002ffffffff, 0x0000000100000001,
+    0x0000000400000002};
+OPENSSL_UNUSED static const uint64_t kSM2OrderRR[] = {
+    0x901192af7c114f20, 0x3464504ade6fa2fa, 0x620fc84c3affe0d4,
+    0x1eb5e412a22b3d3b};
+#elif defined(OPENSSL_32_BIT)
+OPENSSL_UNUSED static const uint32_t kSM2Field[] = {
+    0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0x00000000,
+    0xffffffff, 0xfffffffe};
+OPENSSL_UNUSED static const uint32_t kSM2Order[] = {
+    0x39d54123, 0x53bbf409, 0x21c6052b, 0x7203df6b, 0xffffffff, 0xffffffff,
+    0xffffffff, 0xffffffff};
+OPENSSL_UNUSED static const uint32_t kSM2A[] = {
+    0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0x00000000,
+    0xffffffff, 0xfffffffc};
+OPENSSL_UNUSED static const uint32_t kSM2B[] = {
+    0x4d940e93, 0xddbcbd41, 0x15ab8f92, 0xf39789f5, 0xcf6509a7, 0x4d5a9e4b,
+    0x9d9f5e34, 0x28e9fa9e};
+OPENSSL_UNUSED static const uint32_t kSM2GX[] = {
+    0x334c74c7, 0x715a4589, 0xf2660be1, 0x8fe30bbf, 0x6a39c994, 0x5f990446,
+    0x1f198119, 0x32c4ae2c};
+OPENSSL_UNUSED static const uint32_t kSM2GY[] = {
+    0x2139f0a0, 0x02df32e5, 0xc62a4740, 0xd0a9877c, 0x6b692153, 0x59bdcee3,
+    0xf4f6779c, 0xbc3736a2};
+OPENSSL_UNUSED static const uint32_t kSM2FieldRR[] = {
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000};
+OPENSSL_UNUSED static const uint32_t kSM2OrderRR[] = {
+    0x00000000, 0x00000000, 0x00000000, 0x00000000,
+    0x00000000, 0x00000000, 0x00000000, 0x00000000};
+#else
+#error "unknown word size"
+#endif
+

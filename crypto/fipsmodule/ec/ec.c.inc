@@ -223,6 +223,43 @@ DEFINE_METHOD_FUNCTION(EC_GROUP, EC_group_p521) {
   out->field_greater_than_order = 1;
 }
 
+
+// 添加SM2曲线的实现函数
+DEFINE_METHOD_FUNCTION(EC_GROUP, EC_group_sm2p256v1) {
+  out->curve_name = NID_sm2p256v1;
+  out->comment = "SM2 curve (SM2P-256V1)";
+
+  // OID for SM2 can be added here if desired.
+
+  ec_group_init_static_mont(&out->field, OPENSSL_ARRAY_SIZE(kSM2Field),
+                            kSM2Field, kSM2FieldRR, kSM2FieldN0);
+  ec_group_init_static_mont(&out->order, OPENSSL_ARRAY_SIZE(kSM2Order),
+                            kSM2Order, kSM2OrderRR, kSM2OrderN0);
+
+#if defined(BORINGSSL_HAS_UINT128) && !defined(OPENSSL_SMALL)
+  out->meth = EC_GFp_nistp256_method();
+  OPENSSL_memcpy(out->generator.raw.X.words, kSM2GX, sizeof(kSM2GX));
+  OPENSSL_memcpy(out->generator.raw.Y.words, kSM2GY, sizeof(kSM2GY));
+  out->generator.raw.Z.words[0] = 1;
+  OPENSSL_memcpy(out->b.words, kSM2B, sizeof(kSM2B));
+#else
+  // Fall back to montgomery-backed representations if available.
+  // If you provide kSM2MontGX/kSM2MontGY/kSM2MontB/kSM2FieldR, switch to them here.
+  out->meth = EC_GFp_mont_method();
+  OPENSSL_memcpy(out->generator.raw.X.words, kSM2GX, sizeof(kSM2GX));
+  OPENSSL_memcpy(out->generator.raw.Y.words, kSM2GY, sizeof(kSM2GY));
+  out->generator.raw.Z.words[0] = 1;
+  OPENSSL_memcpy(out->b.words, kSM2B, sizeof(kSM2B));
+#endif
+
+  out->generator.group = out;
+
+  // SM2 uses a = -3 (represented in kSM2A), so set the flag and normalize a.
+  ec_group_set_a_minus3(out);
+  out->has_order = 1;
+  out->field_greater_than_order = 1;
+}
+
 EC_GROUP *EC_GROUP_new_curve_GFp(const BIGNUM *p, const BIGNUM *a,
                                  const BIGNUM *b, BN_CTX *ctx) {
   if (BN_num_bytes(p) > EC_MAX_BYTES) {
@@ -338,6 +375,8 @@ EC_GROUP *EC_GROUP_new_by_curve_name(int nid) {
       return (EC_GROUP *)EC_group_p384();
     case NID_secp521r1:
       return (EC_GROUP *)EC_group_p521();
+    case NID_sm2p256v1:// 加入 SM2 曲线
+      return (EC_GROUP *)EC_group_sm2p256v1();
     default:
       OPENSSL_PUT_ERROR(EC, EC_R_UNKNOWN_GROUP);
       return NULL;
