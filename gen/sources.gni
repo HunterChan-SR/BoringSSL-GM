@@ -91,6 +91,7 @@ bcm_internal_headers = [
   "crypto/fipsmodule/sha/sha256.c.inc",
   "crypto/fipsmodule/sha/sha512.c.inc",
   "crypto/fipsmodule/tls/kdf.c.inc",
+  "crypto/fipsmodule/ec/sm2.c.inc" 
 ]
 
 bcm_sources_asm = [
@@ -665,6 +666,8 @@ crypto_internal_headers = [
   "third_party/fiat/p256_32.h",
   "third_party/fiat/p256_64.h",
   "third_party/fiat/p256_64_msvc.h",
+  "crypto/fipsmodule/ec/sm2.h",
+  "crypto/fipsmodule/ec/sm2-table.h",
 ]
 
 crypto_sources_asm = [

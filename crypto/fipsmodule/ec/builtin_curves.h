@@ -281,108 +281,64 @@ OPENSSL_UNUSED static const uint32_t kP521MontGY[] = {
 // p = FFFFFFFE FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF 00000000 FFFFFFFF FFFFFFFF
 // a = FFFFFFFE FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF 00000000 FFFFFFFF FFFFFFFC  
 // b = 28E9FA9E 9D9F5E34 4D5A9E4B CF6509A7 F39789F5 15AB8F92 DDBCBD41 4D940E93
-// n = FFFFFFFE FFFFFFFF FFFFFFFF FFFFFFFF 7203DF6B 21C6052B 53BBF409 39D54123
 // Gx = 32C4AE2C 1F198119 5F990446 6A39C994 8FE30BBF F2660BE1 715A4589 334C74C7
 // Gy = BC3736A2 F4F6779C 59BDCEE3 6B692153 D0A9877C C62A4740 02DF32E5 2139F0A0
-
+// n = FFFFFFFE FFFFFFFF FFFFFFFF FFFFFFFF 7203DF6B 21C6052B 53BBF409 39D54123
+// h  = 0x1
 
 // SM2曲线常量定义
-OPENSSL_UNUSED static const uint64_t kSM2FieldN0 = 0x0000000000000001;
-OPENSSL_UNUSED static const uint64_t kSM2OrderN0 = 0x327f9e8872350975;
-
+OPENSSL_UNUSED static const uint64_t kSM2FieldN0 = 0xffffffffffffffff;
+OPENSSL_UNUSED static const uint64_t kSM2OrderN0 = 0x53bbf40939d54123;
 #if defined(OPENSSL_64_BIT)
 OPENSSL_UNUSED static const uint64_t kSM2Field[] = {
     0xffffffffffffffff, 0xffffffff00000000, 0xffffffffffffffff, 0xfffffffeffffffff
 };
-
 OPENSSL_UNUSED static const uint64_t kSM2Order[] = {
     0x53bbf40939d54123, 0x7203df6b21c6052b, 0xffffffffffffffff, 0xfffffffeffffffff
 };
-
-OPENSSL_UNUSED static const uint64_t kSM2B[] = {
-    0xddbcbd414d940e93, 0xf39789f515ab8f92, 0x4d5a9e4bcf6509a7, 0x28e9fa9e9d9f5e34
-};
-
-OPENSSL_UNUSED static const uint64_t kSM2GX[] = {
-    0x715a4589334c74c7, 0x8fe30bbff2660be1, 0x5f9904466a39c994, 0x32c4ae2c1f198119
-};
-
-OPENSSL_UNUSED static const uint64_t kSM2GY[] = {
-    0x02df32e52139f0a0, 0xd0a9877cc62a4740, 0x59bdcee36b692153, 0xbc3736a2f4f6779c
-};
-
 OPENSSL_UNUSED static const uint64_t kSM2FieldR[] = {
     0x0000000000000001, 0x00000000ffffffff, 0x0000000000000000, 0x0000000100000000
 };
-
 OPENSSL_UNUSED static const uint64_t kSM2FieldRR[] = {
     0x0000000200000003, 0x00000002ffffffff, 0x0000000100000001, 0x0000000400000002
 };
-
 OPENSSL_UNUSED static const uint64_t kSM2OrderRR[] = {
-    0x901192af7c114f20, 0x3464504ade6fa2fa, 0x620fc84c3affe0d4, 0x1eb5e412a22b3d3b
+    0x023dcaa3e4108ade, 0xb03c896c98b6a154, 0x495cdb9a5e9f32e5, 0x12ac6363dea4e640
 };
-
 OPENSSL_UNUSED static const uint64_t kSM2MontB[] = {
     0x90d230632bc0dd42, 0x71cf379ae9b537ab, 0x527981505ea51c3c, 0x240fe188ba20e2c8
 };
-
 OPENSSL_UNUSED static const uint64_t kSM2MontGX[] = {
     0x61328990f418029e, 0x3e7981eddca6c050, 0xd6a1ed99ac24c3c3, 0x91167a5ee1c13b05
 };
-
 OPENSSL_UNUSED static const uint64_t kSM2MontGY[] = {
     0xc1354e593c2d0ddd, 0xc1f5e5788d3295fa, 0x8d4cfb066e2a48f8, 0x63cd65d481d735bd
 };
-
 #elif defined(OPENSSL_32_BIT)
-OPENSSL_UNUSED static const uint32_t kSM2FieldN0 = 0x00000001;
-OPENSSL_UNUSED static const uint32_t kSM2OrderN0 = 0x72350975;
-
 OPENSSL_UNUSED static const uint32_t kSM2Field[] = {
     0xffffffff, 0xffffffff, 0x00000000, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xfffffffe
 };
-
 OPENSSL_UNUSED static const uint32_t kSM2Order[] = {
     0x39d54123, 0x53bbf409, 0x21c6052b, 0x7203df6b, 0xffffffff, 0xffffffff, 0xffffffff, 0xfffffffe
 };
-
-OPENSSL_UNUSED static const uint32_t kSM2B[] = {
-    0x4d940e93, 0xddbcbd41, 0x15ab8f92, 0xf39789f5, 0xcf6509a7, 0x4d5a9e4b, 0x9d9f5e34, 0x28e9fa9e
-};
-
-OPENSSL_UNUSED static const uint32_t kSM2GX[] = {
-    0x334c74c7, 0x715a4589, 0xf2660be1, 0x8fe30bbf, 0x6a39c994, 0x5f990446, 0x1f198119, 0x32c4ae2c
-};
-
-OPENSSL_UNUSED static const uint32_t kSM2GY[] = {
-    0x2139f0a0, 0x02df32e5, 0xc62a4740, 0xd0a9877c, 0x6b692153, 0x59bdcee3, 0xf4f6779c, 0xbc3736a2
-};
-
 OPENSSL_UNUSED static const uint32_t kSM2FieldR[] = {
     0x00000001, 0x00000000, 0xffffffff, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000001
 };
-
 OPENSSL_UNUSED static const uint32_t kSM2FieldRR[] = {
     0x00000003, 0x00000002, 0xffffffff, 0x00000002, 0x00000001, 0x00000001, 0x00000002, 0x00000004
 };
-
 OPENSSL_UNUSED static const uint32_t kSM2OrderRR[] = {
-    0x7c114f20, 0x901192af, 0xde6fa2fa, 0x3464504a, 0x3affe0d4, 0x620fc84c, 0xa22b3d3b, 0x1eb5e412
+    0xe4108ade, 0x023dcaa3, 0x98b6a154, 0xb03c896c, 0x5e9f32e5, 0x495cdb9a, 0xdea4e640, 0x12ac6363
 };
-
 OPENSSL_UNUSED static const uint32_t kSM2MontB[] = {
     0x2bc0dd42, 0x90d23063, 0xe9b537ab, 0x71cf379a, 0x5ea51c3c, 0x52798150, 0xba20e2c8, 0x240fe188
 };
-
 OPENSSL_UNUSED static const uint32_t kSM2MontGX[] = {
     0xf418029e, 0x61328990, 0xdca6c050, 0x3e7981ed, 0xac24c3c3, 0xd6a1ed99, 0xe1c13b05, 0x91167a5e
 };
-
 OPENSSL_UNUSED static const uint32_t kSM2MontGY[] = {
     0x3c2d0ddd, 0xc1354e59, 0x8d3295fa, 0xc1f5e578, 0x6e2a48f8, 0x8d4cfb06, 0x81d735bd, 0x63cd65d4
 };
-
 #else
-#error "unknown word size"
+#error "unknown word size (requires 64-bit or 32-bit OpenSSL)"
 #endif

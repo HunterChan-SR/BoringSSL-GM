@@ -226,9 +226,37 @@ DEFINE_METHOD_FUNCTION(EC_GROUP, EC_group_p521) {
 
 // 添加SM2曲线的实现函数
 DEFINE_METHOD_FUNCTION(EC_GROUP, EC_group_sm2p256v1) {
-//   out->curve_name = NID_sm2p256v1;
-//   out->comment = "SM2P-256V1";
+  out->curve_name = NID_sm2p256v1;
+  out->comment = "SM2P-256V1";
+  // SM2 curve OID: 1.2.156.10197.1.301
+  static const uint8_t kOIDSM2[] = {0x2A, 0x81, 0x1C, 0xCF, 0x55, 0x01, 0x82, 0x2D};
+  OPENSSL_memcpy(out->oid, kOIDSM2, sizeof(kOIDSM2));
+  out->oid_len = sizeof(kOIDSM2);
 
+  // Initialize field and order with SM2 parameters
+  ec_group_init_static_mont(&out->field, OPENSSL_ARRAY_SIZE(kSM2Field),
+                            kSM2Field, kSM2FieldRR, kSM2FieldN0);
+  ec_group_init_static_mont(&out->order, OPENSSL_ARRAY_SIZE(kSM2Order),
+                            kSM2Order, kSM2OrderRR, kSM2OrderN0);
+
+  // Use generic Montgomery method for SM2
+  out->meth = EC_GFp_sm2_method();
+  
+  // Set generator point coordinates
+  out->generator.group = out;
+  OPENSSL_memcpy(out->generator.raw.X.words, kSM2MontGX, sizeof(kSM2MontGX));
+  OPENSSL_memcpy(out->generator.raw.Y.words, kSM2MontGY, sizeof(kSM2MontGY));
+  OPENSSL_memcpy(out->generator.raw.Z.words, kSM2FieldR, sizeof(kSM2FieldR));
+  
+  // Set curve parameter b
+  OPENSSL_memcpy(out->b.words, kSM2MontB, sizeof(kSM2MontB));
+
+  // SM2 uses a = p - 3, same as other curves
+  ec_group_set_a_minus3(out);
+  
+  // Standard flags
+  out->has_order = 1;
+  out->field_greater_than_order = 1;
 }
 
 EC_GROUP *EC_GROUP_new_curve_GFp(const BIGNUM *p, const BIGNUM *a,

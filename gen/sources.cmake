@@ -95,6 +95,7 @@ set(
   crypto/fipsmodule/sha/sha256.c.inc
   crypto/fipsmodule/sha/sha512.c.inc
   crypto/fipsmodule/tls/kdf.c.inc
+  crypto/fipsmodule/ec/sm2.c.inc # 加入sm2
 )
 
 set(
@@ -683,6 +684,8 @@ set(
   third_party/fiat/p256_32.h
   third_party/fiat/p256_64.h
   third_party/fiat/p256_64_msvc.h
+  crypto/fipsmodule/ec/sm2.h
+  crypto/fipsmodule/ec/sm2-table.h
 )
 
 set(

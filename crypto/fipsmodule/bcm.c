@@ -105,7 +105,8 @@
 #include "sha/sha256.c.inc"
 #include "sha/sha512.c.inc"
 #include "tls/kdf.c.inc"
-
+// 加入sm2
+#include "ec/sm2.c.inc"
 
 #if defined(BORINGSSL_FIPS)
 
