@@ -38,7 +38,7 @@ typedef SM2_POINT_AFFINE PRECOMP_SM2_ROW[64];
 
 // One converted into SM2 Montgomery domain (1 * 2^256 mod p)
 // SM2 p = 2^256 - 2^224 + 2^192 + 2^96 - 1
-static const BN_ULONG ONE_MONT[SM2_LIMBS] = {
+static const BN_ULONG SM2_ONE_MONT[SM2_LIMBS] = {
     TOBN(0x00000000, 0x00000001), TOBN(0x00000000, 0x00000000),
     TOBN(0x00000000, 0x00000000), TOBN(0xfffffffe, 0xffffffff),
     TOBN(0xffffffff, 0xffffffff), TOBN(0xffffffff, 0xffffffff),
@@ -365,11 +365,11 @@ static void ecp_sm2_point_mul_base(const EC_GROUP *group, EC_JACOBIAN *r,
   ecp_sm2_neg(neg_Y, t.Y);
   copy_conditional(t.Y, neg_Y, wval & 1);
 
-  // Convert affine to Jacobian: Z = ONE_MONT (non-infinity) or 0 (infinity)
+  // Convert affine to Jacobian: Z = SM2_ONE_MONT (non-infinity) or 0 (infinity)
   OPENSSL_memcpy(p.X, t.X, sizeof(p.X));
   OPENSSL_memcpy(p.Y, t.Y, sizeof(p.Y));
   OPENSSL_memset(p.Z, 0, sizeof(p.Z));
-  copy_conditional(p.Z, ONE_MONT, is_not_zero(wval >> 1));
+  copy_conditional(p.Z, SM2_ONE_MONT, is_not_zero(wval >> 1));
 
   // Process remaining precomputed rows (36 rows total for 256-bit scalar)
   for (int i = 1; i < 37; i++) {
@@ -413,7 +413,7 @@ static void ecp_sm2_points_mul_public(const EC_GROUP *group,
   if ((wval >> 1) != 0) {
     OPENSSL_memcpy(p.X, &ecp_sm2_precomputed[0][(wval >> 1) - 1].X, sizeof(p.X));
     OPENSSL_memcpy(p.Y, &ecp_sm2_precomputed[0][(wval >> 1) - 1].Y, sizeof(p.Y));
-    OPENSSL_memcpy(p.Z, ONE_MONT, sizeof(p.Z));
+    OPENSSL_memcpy(p.Z, SM2_ONE_MONT, sizeof(p.Z));
     if ((wval & 1) == 1) {
       ecp_sm2_neg(p.Y, p.Y);
     }

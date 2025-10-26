@@ -249,11 +249,12 @@ def main():
     print("// SM2 Precomputed Table (window-7 for fast scalar multiplication)")
     print("// --------------------------")
 
-    # 预计算参数（window-7：37行×64列，支持256位标量）
+    # 预计算参数（window-7：37行×127列，支持256位标量）
     WINDOW_SIZE = 7
-    NUM_ROWS = 37  # ceil(256 / 7) = 37
-    S_VALUES = list(range(-63, 64))  # Booth编码：-63~+63（64个非零点）
-    S_VALUES.remove(0)
+    NUM_ROWS = (256 + WINDOW_SIZE - 1) // WINDOW_SIZE  # 正确计算：ceil(256/7) = 37
+    # 修正S_VALUES范围：window-7应包含-64~63（不含0），共127个非零点（2^7-1）
+    S_VALUES = list(range(-64, 64))
+    S_VALUES.remove(0)  # 移除0，保留127个值
 
     # 初始化生成元G
     G = SM2Point(Gx, Gy)
@@ -261,33 +262,33 @@ def main():
 
     # 生成每一行的预计算点
     for row_idx in range(NUM_ROWS):
-        shift = WINDOW_SIZE * row_idx  # 该行点需要加倍的次数
+        shift = WINDOW_SIZE * row_idx  # 该行点需要加倍的次数（左移窗口）
         row_points = []
         for s in S_VALUES:
             # 1. 计算 s*G（处理负系数：取反y坐标）
             abs_s = abs(s)
             G_s = abs_s * G
-            # 2. 加倍shift次：G_s * 2^shift
+            # 2. 加倍shift次：G_s * 2^shift（对应窗口位置）
             G_s_shift = G_s.double_k_times(shift)
             # 3. 转换为Montgomery域
             x_mont, y_mont = G_s_shift.to_mont(R)
             if s < 0:
-                y_mont = (-y_mont) % p  # 负系数取反y
+                y_mont = (-y_mont) % p  # 负系数取反y坐标
             # 4. 转换为TOBN格式（小端序，匹配SM2_LIMBS）
-            if SM2_LIMBS == 4:  # 64位环境
+            if SM2_LIMBS == 4:  # 64位环境：每个坐标4个uint64元素
                 x_arr = int_to_le_uint64_arr(x_mont)
                 y_arr = int_to_le_uint64_arr(y_mont)
-            else:  # 32位环境，SM2_LIMBS=8
+            else:  # 32位环境：每个坐标8个uint32元素
                 x_arr = int_to_le_uint32_arr(x_mont)
                 y_arr = int_to_le_uint32_arr(y_mont)
             x_tobn = [uint64_to_tobn(val) for val in x_arr]
             y_tobn = [uint64_to_tobn(val) for val in y_arr]
-            # 5. 组合成SM2_POINT_AFFINE字符串（匹配已有结构）
+            # 5. 组合成SM2_POINT_AFFINE结构
             point_str = f"{{{{{', '.join(x_tobn)}}}, {{ {', '.join(y_tobn)} }}}}"
             row_points.append(point_str)
         precomputed.append(row_points)
 
-    # 输出预计算表（使用已定义的PRECOMP_SM2_ROW）
+    # 输出预计算表（37行×127列，数量匹配window-7要求）
     print("static const alignas(4096) PRECOMP_SM2_ROW ecp_sm2_precomputed[37] = {")
     for i, row in enumerate(precomputed):
         row_str = ",\n     ".join(row)

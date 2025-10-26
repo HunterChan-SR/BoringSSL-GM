@@ -287,6 +287,7 @@ OPENSSL_UNUSED static const uint32_t kP521MontGY[] = {
 // h  = 0x1
 
 // SM2曲线常量定义
+// from make_sm2.py
 OPENSSL_UNUSED static const uint64_t kSM2FieldN0 = 0xffffffffffffffff;
 OPENSSL_UNUSED static const uint64_t kSM2OrderN0 = 0x53bbf40939d54123;
 #if defined(OPENSSL_64_BIT)
