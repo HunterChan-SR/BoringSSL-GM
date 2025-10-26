@@ -722,6 +722,9 @@ const EC_METHOD *EC_GFp_nistp256_method(void);
 // x86-64 optimized P256. See http://eprint.iacr.org/2013/816.
 const EC_METHOD *EC_GFp_nistz256_method(void);
 
+// sm2
+const EC_METHOD *EC_GFp_sm2_method(void);
+
 // An EC_WRAPPED_SCALAR is an |EC_SCALAR| with a parallel |BIGNUM|
 // representation. It exists to support the |EC_KEY_get0_private_key| API.
 typedef struct {
