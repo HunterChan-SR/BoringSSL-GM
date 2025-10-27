@@ -104,6 +104,9 @@
 #include "sha/sha1.c.inc"
 #include "sha/sha256.c.inc"
 #include "sha/sha512.c.inc"
+
+#include "sm3/sm3.c.inc"// 加入sm3
+
 #include "tls/kdf.c.inc"
 
 

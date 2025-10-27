@@ -88,6 +88,9 @@ static const struct nid_to_digest nid_to_digest_mapping[] = {
     {NID_sha512, EVP_sha512, SN_sha512, LN_sha512},
     {NID_sha512_256, EVP_sha512_256, SN_sha512_256, LN_sha512_256},
     {NID_md5_sha1, EVP_md5_sha1, SN_md5_sha1, LN_md5_sha1},
+
+    // 加入sm3
+     {NID_sm3, EVP_sm3, SN_sm3, LN_sm3}, // 加入sm3
     // As a remnant of signing |EVP_MD|s, OpenSSL returned the corresponding
     // hash function when given a signature OID. To avoid unintended lax parsing
     // of hash OIDs, this is no longer supported for lookup by OID or NID.
@@ -106,8 +109,7 @@ static const struct nid_to_digest nid_to_digest_mapping[] = {
      LN_sha384WithRSAEncryption},
     {NID_undef, EVP_sha512, SN_sha512WithRSAEncryption,
      LN_sha512WithRSAEncryption},
-     // 加入sm3
-     {NID_undef, EVP_sm3, SN_sm3,LN_sm3}, // 加入sm3
+     
 };
 
 const EVP_MD* EVP_get_digestbynid(int nid) {
@@ -144,6 +146,8 @@ static const struct {
   { {0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x03}, 9, NID_sha512 },
   // 2.16.840.1.101.3.4.2.4
   { {0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x04}, 9, NID_sha224 },
+   // 1.2.156.10197.1.401 
+  {{0x2a, 0x81, 0x1c, 0xcf, 0x55, 0x01, 0x83, 0x11}, 8, NID_sm3} //加入sm3
 };
 
 static const EVP_MD *cbs_to_md(const CBS *cbs) {
@@ -358,29 +362,29 @@ const EVP_MD evp_md_md5_sha1 = {
 const EVP_MD *EVP_md5_sha1(void) { return &evp_md_md5_sha1; }
 
 // 添加 SM3 相关实现
-static void sm3_init(EVP_MD_CTX *ctx) {
-  BSSL_CHECK(SM3_Init(ctx->md_data));
-}
+// static void sm3_init(EVP_MD_CTX *ctx) {
+//   BSSL_CHECK(SM3_Init(ctx->md_data));
+// }
 
-static void sm3_update(EVP_MD_CTX *ctx, const void *data, size_t count) {
-  BSSL_CHECK(SM3_Update(ctx->md_data, data, count));
-}
+// static void sm3_update(EVP_MD_CTX *ctx, const void *data, size_t count) {
+//   BSSL_CHECK(SM3_Update(ctx->md_data, data, count));
+// }
 
-static void sm3_final(EVP_MD_CTX *ctx, uint8_t *out) {
-  BSSL_CHECK(SM3_Final(out, ctx->md_data));
-}
+// static void sm3_final(EVP_MD_CTX *ctx, uint8_t *out) {
+//   BSSL_CHECK(SM3_Final(out, ctx->md_data));
+// }
 
-// 定义 SM3 的 EVP_MD 结构体
-static const EVP_MD evp_md_sm3 = {
-  NID_sm3,              // SM3 的 NID
-  SM3_DIGEST_LENGTH,    // 摘要长度 32 bytes
-  0,                    // 标志位
-  sm3_init,            // 初始化函数
-  sm3_update,          // 更新函数
-  sm3_final,           // 最终化函数
-  SM3_CBLOCK,          // 块大小 64 bytes
-  sizeof(SM3_CTX),     // 上下文大小
-};
+// // 定义 SM3 的 EVP_MD 结构体
+// static const EVP_MD evp_md_sm3 = {
+//   NID_sm3,              // SM3 的 NID
+//   SM3_DIGEST_LENGTH,    // 摘要长度 32 bytes
+//   0,                    // 标志位
+//   sm3_init,            // 初始化函数
+//   sm3_update,          // 更新函数
+//   sm3_final,           // 最终化函数
+//   SM3_CBLOCK,          // 块大小 64 bytes
+//   sizeof(SM3_CTX),     // 上下文大小
+// };
 
-// SM3 函数实现
-const EVP_MD *EVP_sm3(void) { return &evp_md_sm3; }
+// // SM3 函数实现
+// const EVP_MD *EVP_sm3(void) { return &evp_md_sm3; }

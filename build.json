@@ -87,7 +87,8 @@
             "crypto/fipsmodule/sha/sha1.c.inc",
             "crypto/fipsmodule/sha/sha256.c.inc",
             "crypto/fipsmodule/sha/sha512.c.inc",
-            "crypto/fipsmodule/tls/kdf.c.inc"
+            "crypto/fipsmodule/tls/kdf.c.inc",
+            "crypto/fipsmodule/sm3/sm3.c.inc" 
         ],
         "asm": [
             "third_party/fiat/asm/fiat_p256_adx_mul.S",
@@ -304,6 +305,7 @@
             "crypto/rsa_extra/rsa_print.c",
             "crypto/sha/sha1.c",
             "crypto/sha/sha256.c",
+                "crypto/sm3/sm3.c",
             "crypto/siphash/siphash.c",
             "crypto/slhdsa/fors.c",
             "crypto/slhdsa/merkle.c",
@@ -394,8 +396,7 @@
             "crypto/x509/x_spki.c",
             "crypto/x509/x_val.c",
             "crypto/x509/x_x509.c",
-            "crypto/x509/x_x509a.c",
-            "crypto/sm3/sm3.c"
+            "crypto/x509/x_x509a.c"
         ],
         "hdrs": [
             "include/openssl/aead.h",
@@ -525,6 +526,7 @@
             "crypto/fipsmodule/rsa/internal.h",
             "crypto/fipsmodule/service_indicator/internal.h",
             "crypto/fipsmodule/sha/internal.h",
+            "crypto/fipsmodule/sm3/internal.h",
             "crypto/fipsmodule/tls/internal.h",
             "crypto/hrss/internal.h",
             "crypto/bcm_support.h",

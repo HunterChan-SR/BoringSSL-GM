@@ -95,6 +95,7 @@ set(
   crypto/fipsmodule/sha/sha256.c.inc
   crypto/fipsmodule/sha/sha512.c.inc
   crypto/fipsmodule/tls/kdf.c.inc
+  crypto/fipsmodule/sm3/sm3.c.inc
 )
 
 set(
@@ -413,6 +414,7 @@ set(
   crypto/rsa_extra/rsa_print.c
   crypto/sha/sha1.c
   crypto/sha/sha256.c
+  crypto/sm3/sm3.c
   crypto/siphash/siphash.c
   crypto/slhdsa/fors.c
   crypto/slhdsa/merkle.c
@@ -505,7 +507,6 @@ set(
   crypto/x509/x_x509.c
   crypto/x509/x_x509a.c
   gen/crypto/err_data.c
-  crypto/sm3/sm3.c
 )
 
 set(
@@ -642,6 +643,7 @@ set(
   crypto/fipsmodule/rsa/internal.h
   crypto/fipsmodule/service_indicator/internal.h
   crypto/fipsmodule/sha/internal.h
+  crypto/fipsmodule/sm3/internal.h
   crypto/fipsmodule/tls/internal.h
   crypto/hrss/internal.h
   crypto/internal.h

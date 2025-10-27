@@ -953,3 +953,11 @@ sha512_256		962
 hkdf		963
 X25519Kyber768Draft00		964
 X25519MLKEM768		965
+ISO_CN		966
+oscca		967
+sm_scheme		968
+sm2		969
+sm3		970
+sm3WithRSAEncryption		971
+SM2_with_SM3		972
+hmacWithSM3		973

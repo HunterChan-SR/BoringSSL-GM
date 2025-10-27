@@ -34,47 +34,22 @@
 extern "C" {
 #endif
 
-
-// SM3.
-
-
-// SM3_CBLOCK is the block size of SM3.
-#define SM3_CBLOCK 64
-
-// SM3_DIGEST_LENGTH is the length of an SM3 digest.
 #define SM3_DIGEST_LENGTH 32
 
-// SM3_Init initialises |sm3| and returns one.
-OPENSSL_EXPORT int SM3_Init(SM3_CTX *sm3);
+#define SM3_BLOCK_SIZE 64
 
-// SM3_Update adds |len| bytes from |data| to |sm3| and returns one.
-OPENSSL_EXPORT int SM3_Update(SM3_CTX *sm3, const void *data, size_t len);
 
-// SM3_Final adds the final padding to |sm3| and writes the resulting digest to
-// |out|, which must have at least |SM3_DIGEST_LENGTH| bytes of space. It
-// returns one.
-OPENSSL_EXPORT int SM3_Final(uint8_t out[SM3_DIGEST_LENGTH], SM3_CTX *sm3);
+OPENSSL_EXPORT uint8_t *SM3(const uint8_t *data, size_t len, uint8_t out[SM3_DIGEST_LENGTH]);
 
-// SM3 writes the digest of |len| bytes from |data| to |out| and returns |out|.
-// There must be at least |SM3_DIGEST_LENGTH| bytes of space in |out|.
-OPENSSL_EXPORT uint8_t *SM3(const uint8_t *data, size_t len,
-                           uint8_t out[SM3_DIGEST_LENGTH]);
+OPENSSL_EXPORT int SM3_Init(SM3_CTX *c);
+OPENSSL_EXPORT int SM3_Update(SM3_CTX *c, const void *data, size_t len);
+OPENSSL_EXPORT int SM3_Final(uint8_t out[SM3_DIGEST_LENGTH], SM3_CTX *c);
 
-// SM3_Transform is a low-level function that performs a single, SM3 block
-// transformation using the state from |sm3| and 64 bytes from |block|.
-OPENSSL_EXPORT void SM3_Transform(SM3_CTX *sm3,
-                                const uint8_t block[SM3_CBLOCK]);
-
-struct sm3_state_st {
-  uint32_t h[8];  // SM3 uses 8 32-bit words for state, unlike MD5's 4
-  uint32_t Nl, Nh;
-  uint8_t data[SM3_CBLOCK];
-  unsigned num;
-};
-
+OPENSSL_EXPORT void SM3_Transform(SM3_CTX *md5,
+                                  const uint8_t block[SM3_BLOCK_SIZE]);
 
 #if defined(__cplusplus)
-}  // extern C
+}
 #endif
 
-#endif  // OPENSSL_HEADER_SM3_H
+#endif // OPENSSL_HEADER_SM3_H

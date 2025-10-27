@@ -65,6 +65,17 @@ struct sha256_state_st {
 };
 
 
+// 加入sm3
+#define BCM_SM3_CBLOCK 64
+
+// SM3_CTX
+struct sm3_state_st {
+  uint32_t h[8];
+  uint32_t Nl, Nh;
+  uint8_t data[BCM_SM3_CBLOCK];
+  unsigned num;
+};
+
 #if defined(__cplusplus)
 }  // extern C
 #endif

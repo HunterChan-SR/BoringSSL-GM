@@ -175,6 +175,24 @@ bcm_infallible BCM_sha256_transform_blocks(uint32_t state[8],
                                            size_t num_blocks);
 
 
+//加入sm3
+
+#define BCM_SM3_DIGEST_LENGTH 32
+
+bcm_infallible BCM_sm3_init(SM3_CTX *sm3);
+
+bcm_infallible BCM_sm3_update(SM3_CTX *sm3, const void *data, size_t len);
+
+bcm_infallible BCM_sm3_final(uint8_t out[BCM_SM3_DIGEST_LENGTH],
+                                SM3_CTX *sm3);
+
+bcm_infallible BCM_sm3_transform(SM3_CTX *sm3,
+                                    const uint8_t block[BCM_SM3_CBLOCK]);
+
+// bcm_infallible BCM_sm3_transform_blocks(uint32_t state[8],
+//                                            const uint8_t *data,
+//                                            size_t num_blocks);
+
 #if defined(__cplusplus)
 }  // extern C
 #endif

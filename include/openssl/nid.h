@@ -4258,11 +4258,100 @@ extern "C" {
 #define SN_X25519MLKEM768 "X25519MLKEM768"
 #define NID_X25519MLKEM768 965
 
-// 加入sm3
+
+
+
+// 加入gm
+
+
+#define SN_ISO_CN "ISO-CN"
+#define LN_ISO_CN "ISO CN Member Body"
+#define NID_ISO_CN 966
+#define OBJ_ISO_CN 1L, 2L, 156L
+
+#define SN_oscca "oscca"
+#define NID_oscca 967
+#define OBJ_oscca 1L, 2L, 156L, 10197L
+
+#define SN_sm_scheme "sm-scheme"
+#define NID_sm_scheme 968
+#define OBJ_sm_scheme 1L, 2L, 156L, 10197L, 1L
+
+#define SN_sm2 "SM2"
+#define LN_sm2 "sm2"
+#define NID_sm2 969
+#define OBJ_sm2 1L, 2L, 156L, 10197L, 1L, 301L
+
 #define SN_sm3 "SM3"
 #define LN_sm3 "sm3"
-#define NID_sm3 966
-#define OBJ_sm3 1L, 2L, 156L, 10197L, 1L, 401L, 1L
+#define NID_sm3 970
+#define OBJ_sm3 1L, 2L, 156L, 10197L, 1L, 401L
+
+#define SN_sm3WithRSAEncryption "RSA-SM3"
+#define LN_sm3WithRSAEncryption "sm3WithRSAEncryption"
+#define NID_sm3WithRSAEncryption 971
+#define OBJ_sm3WithRSAEncryption 1L, 2L, 156L, 10197L, 1L, 504L
+
+#define SN_SM2_with_SM3 "SM2-SM3"
+#define LN_SM2_with_SM3 "SM2-with-SM3"
+#define NID_SM2_with_SM3 972
+#define OBJ_SM2_with_SM3 1L, 2L, 156L, 10197L, 1L, 501L
+
+#define LN_hmacWithSM3 "hmacWithSM3"
+#define NID_hmacWithSM3 973
+#define OBJ_hmacWithSM3 1L, 2L, 156L, 10197L, 1L, 401L, 3L, 1L
+
+#define SN_sm4_ecb "SM4-ECB"
+#define LN_sm4_ecb "sm4-ecb"
+#define NID_sm4_ecb 974
+#define OBJ_sm4_ecb 1L, 2L, 156L, 10197L, 1L, 104L, 1L
+
+#define SN_sm4_cbc "SM4-CBC"
+#define LN_sm4_cbc "sm4-cbc"
+#define NID_sm4_cbc 975
+#define OBJ_sm4_cbc 1L, 2L, 156L, 10197L, 1L, 104L, 2L
+
+#define SN_sm4_ofb128 "SM4-OFB"
+#define LN_sm4_ofb128 "sm4-ofb"
+#define NID_sm4_ofb128 976
+#define OBJ_sm4_ofb128 1L, 2L, 156L, 10197L, 1L, 104L, 3L
+
+#define SN_sm4_cfb128 "SM4-CFB"
+#define LN_sm4_cfb128 "sm4-cfb"
+#define NID_sm4_cfb128 977
+#define OBJ_sm4_cfb128 1L, 2L, 156L, 10197L, 1L, 104L, 4L
+
+#define SN_sm4_cfb1 "SM4-CFB1"
+#define LN_sm4_cfb1 "sm4-cfb1"
+#define NID_sm4_cfb1 978
+#define OBJ_sm4_cfb1 1L, 2L, 156L, 10197L, 1L, 104L, 5L
+
+#define SN_sm4_cfb8 "SM4-CFB8"
+#define LN_sm4_cfb8 "sm4-cfb8"
+#define NID_sm4_cfb8 979
+#define OBJ_sm4_cfb8 1L, 2L, 156L, 10197L, 1L, 104L, 6L
+
+#define SN_sm4_ctr "SM4-CTR"
+#define LN_sm4_ctr "sm4-ctr"
+#define NID_sm4_ctr 980
+#define OBJ_sm4_ctr 1L, 2L, 156L, 10197L, 1L, 104L, 7L
+
+#define SN_sm4_gcm "SM4-GCM"
+#define LN_sm4_gcm "sm4-gcm"
+#define NID_sm4_gcm 981
+#define OBJ_sm4_gcm 1L, 2L, 156L, 10197L, 1L, 104L, 8L
+
+#define SN_sm4_ccm "SM4-CCM"
+#define LN_sm4_ccm "sm4-ccm"
+#define NID_sm4_ccm 982
+#define OBJ_sm4_ccm 1L, 2L, 156L, 10197L, 1L, 104L, 9L
+
+#define SN_sm4_xts "SM4-XTS"
+#define LN_sm4_xts "sm4-xts"
+#define NID_sm4_xts 983
+#define OBJ_sm4_xts 1L, 2L, 156L, 10197L, 1L, 104L, 10L
+
+
 
 #if defined(__cplusplus)
 } /* extern C */
