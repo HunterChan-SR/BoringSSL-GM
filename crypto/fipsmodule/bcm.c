@@ -62,6 +62,7 @@
 #include "cipher/cipher.c.inc"
 #include "cipher/e_aes.c.inc"
 #include "cipher/e_aesccm.c.inc"
+#include "cipher/e_sm4.c.inc" //加入sm4
 #include "cmac/cmac.c.inc"
 #include "dh/check.c.inc"
 #include "dh/dh.c.inc"
@@ -106,7 +107,7 @@
 #include "sha/sha512.c.inc"
 
 #include "sm3/sm3.c.inc"// 加入sm3
-
+#include "sm4/sm4.c.inc" //加入sm4
 #include "tls/kdf.c.inc"
 
 

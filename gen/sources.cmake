@@ -51,6 +51,7 @@ set(
   crypto/fipsmodule/cipher/aead.c.inc
   crypto/fipsmodule/cipher/cipher.c.inc
   crypto/fipsmodule/cipher/e_aes.c.inc
+    crypto/fipsmodule/cipher/e_sm4.c.inc
   crypto/fipsmodule/cipher/e_aesccm.c.inc
   crypto/fipsmodule/cmac/cmac.c.inc
   crypto/fipsmodule/dh/check.c.inc
@@ -95,7 +96,8 @@ set(
   crypto/fipsmodule/sha/sha256.c.inc
   crypto/fipsmodule/sha/sha512.c.inc
   crypto/fipsmodule/tls/kdf.c.inc
-  crypto/fipsmodule/sm3/sm3.c.inc
+    crypto/fipsmodule/sm3/sm3.c.inc
+    crypto/fipsmodule/sm4/sm4.c.inc
 )
 
 set(
@@ -602,6 +604,7 @@ set(
   include/openssl/x509v3.h
   include/openssl/x509v3_errors.h
   include/openssl/sm3.h
+  include/openssl/sm4.h
 )
 
 set(

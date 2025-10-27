@@ -1,0 +1,47 @@
+/**
+ * 添加SM4相关定义
+ * 2025.10.27 陈贺
+ */
+
+
+
+
+
+
+
+
+#ifndef OPENSSL_HEADER_SM4_H
+#define OPENSSL_HEADER_SM4_H
+
+#include <openssl/base.h>
+
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
+#define SM4_ENCRYPT 1
+#define SM4_DECRYPT 0
+
+#define SM4_BLOCK_SIZE 16
+#define SM4_KEY_SCHEDULE 32
+
+typedef struct SM4_KEY_st {
+  uint32_t rk[SM4_KEY_SCHEDULE];
+} SM4_KEY;
+
+OPENSSL_EXPORT int SM4_set_key(const uint8_t *key, SM4_KEY *ks);
+
+OPENSSL_EXPORT void SM4_encrypt(const uint8_t *in, uint8_t *out,
+                                const SM4_KEY *ks);
+
+OPENSSL_EXPORT void SM4_decrypt(const uint8_t *in, uint8_t *out,
+                                const SM4_KEY *ks);
+
+OPENSSL_EXPORT void sm4_ctr32_encrypt_blocks(const uint8_t *in, uint8_t *out,
+                                             size_t blocks, const SM4_KEY *key,
+                                             const uint8_t ivec[16]);
+#if defined(__cplusplus)
+}
+#endif
+
+#endif // OPENSSL_HEADER_SM4_H
