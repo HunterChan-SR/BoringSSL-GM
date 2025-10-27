@@ -4865,6 +4865,9 @@ OPENSSL_EXPORT int SSL_used_hello_retry_request(const SSL *ssl);
 // https://bugs.openjdk.java.net/browse/JDK-8213202
 OPENSSL_EXPORT void SSL_set_jdk11_workaround(SSL *ssl, int enable);
 
+//  加入SM4 cipher suite support
+OPENSSL_EXPORT void SSL_CTX_set_sm4_enabled(SSL_CTX *ctx, int enabled);
+
 // SSL_set_check_client_certificate_type configures whether the client, in
 // TLS 1.2 and below, will check its certificate against the server's requested
 // certificate types.

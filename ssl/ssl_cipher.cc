@@ -251,6 +251,27 @@ static constexpr SSL_CIPHER kCiphers[] = {
 
     // TLS 1.3 suites.
 
+        // 
+    {
+        TLS1_3_RFC_SM4_GCM_SM3,
+        TLS1_3_RFC_SM4_GCM_SM3,
+        TLS1_3_CK_SM4_GCM_SM3,
+        SSL_kGENERIC,
+        SSL_aGENERIC,
+        SSL_SM4GCM,
+        SSL_AEAD,
+        SSL_HANDSHAKE_MAC_SM3,
+    },
+    {
+        TLS1_3_RFC_SM4_CCM_SM3,
+        TLS1_3_RFC_SM4_CCM_SM3,
+        TLS1_3_CK_SM4_CCM_SM3,
+        SSL_kGENERIC,
+        SSL_aGENERIC,
+        SSL_SM4CCM,
+        SSL_AEAD,
+        SSL_HANDSHAKE_MAC_SM3,
+    },
     // Cipher 1301
     {
       TLS1_3_RFC_AES_128_GCM_SHA256,
@@ -606,7 +627,14 @@ bool ssl_cipher_get_evp_aead(const EVP_AEAD **out_aead,
     } else if (cipher->algorithm_enc == SSL_CHACHA20POLY1305) {
       *out_aead = EVP_aead_chacha20_poly1305();
       *out_fixed_iv_len = 12;
-    } else {
+    } else  if (cipher->algorithm_enc == SSL_SM4GCM){
+      if (is_tls13) {
+        *out_aead = EVP_aead_sm4_128_gcm_tls13();
+      } else {
+        *out_aead = EVP_aead_sm4_128_gcm();
+      }
+      *out_fixed_iv_len = 4;
+    } else{
       return false;
     }
 
@@ -666,6 +694,8 @@ const EVP_MD *ssl_get_handshake_digest(uint16_t version,
       return EVP_sha256();
     case SSL_HANDSHAKE_MAC_SHA384:
       return EVP_sha384();
+    case SSL_HANDSHAKE_MAC_SM3:
+      return EVP_sm3();
     default:
       assert(0);
       return NULL;
@@ -1169,7 +1199,6 @@ bool ssl_create_cipher_list(UniquePtr<SSLCipherPreferenceList> *out_cipher_list,
       TLS1_CK_PSK_WITH_AES_256_CBC_SHA & 0xffff,
       SSL3_CK_RSA_DES_192_CBC3_SHA & 0xffff,
   };
-
   // Set up a linked list of ciphers.
   CIPHER_ORDER co_list[OPENSSL_ARRAY_SIZE(kAESCiphers) +
                        OPENSSL_ARRAY_SIZE(kChaChaCiphers) +
@@ -1306,6 +1335,8 @@ size_t ssl_cipher_get_record_split_len(const SSL_CIPHER *cipher) {
       break;
     case SSL_AES128:
     case SSL_AES256:
+    case SSL_SM4GCM:
+    case SSL_SM4CCM:
       block_size = 16;
       break;
     default:
@@ -1388,6 +1419,10 @@ int SSL_CIPHER_get_cipher_nid(const SSL_CIPHER *cipher) {
       return NID_aes_256_gcm;
     case SSL_CHACHA20POLY1305:
       return NID_chacha20_poly1305;
+   case SSL_SM4GCM:
+      return NID_sm4_gcm;
+    case SSL_SM4CCM:
+      return NID_sm4_ccm;
   }
   assert(0);
   return NID_undef;
@@ -1401,6 +1436,8 @@ int SSL_CIPHER_get_digest_nid(const SSL_CIPHER *cipher) {
       return NID_sha1;
     case SSL_SHA256:
       return NID_sha256;
+    case SSL_SM3:
+      return NID_sm3;
   }
   assert(0);
   return NID_undef;
@@ -1445,6 +1482,8 @@ const EVP_MD *SSL_CIPHER_get_handshake_digest(const SSL_CIPHER *cipher) {
       return EVP_sha256();
     case SSL_HANDSHAKE_MAC_SHA384:
       return EVP_sha384();
+    case SSL_HANDSHAKE_MAC_SM3:
+      return EVP_sm3();
   }
   assert(0);
   return NULL;
@@ -1544,6 +1583,8 @@ int SSL_CIPHER_get_bits(const SSL_CIPHER *cipher, int *out_alg_bits) {
   switch (cipher->algorithm_enc) {
     case SSL_AES128:
     case SSL_AES128GCM:
+    case SSL_SM4GCM:
+    case SSL_SM4CCM:
       alg_bits = 128;
       strength_bits = 128;
       break;
@@ -1650,7 +1691,15 @@ const char *SSL_CIPHER_description(const SSL_CIPHER *cipher, char *buf,
     case SSL_CHACHA20POLY1305:
       enc = "ChaCha20-Poly1305";
       break;
-
+   case SSL_SM4CCM:
+        enc = "SM4-CCM(128)";
+        break;
+    case SSL_SM4GCM:
+        enc = "SM4-GCM(128)";
+        break;
+    case SSL_SM4:
+        enc = "SM4(128)";
+        break;
     default:
       enc = "unknown";
       break;
@@ -1668,7 +1717,9 @@ const char *SSL_CIPHER_description(const SSL_CIPHER *cipher, char *buf,
     case SSL_AEAD:
       mac = "AEAD";
       break;
-
+    case SSL_SM3:
+        mac = "SM3";
+        break;
     default:
       mac = "unknown";
       break;
