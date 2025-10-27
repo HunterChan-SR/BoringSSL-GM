@@ -1,3 +1,7 @@
+/**
+ * 添加文件 sm3.c
+ * 2025.10.27 陈贺
+ */
 #include <openssl/sm3.h>
 
 #include <openssl/mem.h>
