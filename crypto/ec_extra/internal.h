@@ -35,6 +35,11 @@ OPENSSL_EXPORT int ec_hash_to_curve_p256_xmd_sha256_sswu(
     const EC_GROUP *group, EC_JACOBIAN *out, const uint8_t *dst, size_t dst_len,
     const uint8_t *msg, size_t msg_len);
 
+//sm2
+OPENSSL_EXPORT int ec_hash_to_curve_sm2p256v1_xmd_sm3_sswu(
+    const EC_GROUP *group, EC_JACOBIAN *out, const uint8_t *dst, size_t dst_len,
+    const uint8_t *msg, size_t msg_len);
+
 // ec_hash_to_curve_p384_xmd_sha384_sswu hashes |msg| to a point on |group| and
 // writes the result to |out|, implementing the P384_XMD:SHA-384_SSWU_RO_ suite
 // from RFC 9380. It returns one on success and zero on error.

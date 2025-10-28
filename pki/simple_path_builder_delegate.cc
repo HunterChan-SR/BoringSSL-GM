@@ -34,6 +34,7 @@ bool IsAcceptableCurveForEcdsa(int curve_nid) {
     case NID_X9_62_prime256v1:
     case NID_secp384r1:
     case NID_secp521r1:
+    case NID_sm2:
       return true;
   }
 

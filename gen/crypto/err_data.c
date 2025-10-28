@@ -51,8 +51,8 @@ static_assert(ERR_LIB_DIGEST == 29, "library value changed");
 static_assert(ERR_LIB_CIPHER == 30, "library value changed");
 static_assert(ERR_LIB_HKDF == 31, "library value changed");
 static_assert(ERR_LIB_TRUST_TOKEN == 32, "library value changed");
-static_assert(ERR_LIB_USER == 33, "library value changed");
-static_assert(ERR_NUM_LIBS == 34, "number of libraries changed");
+static_assert(ERR_LIB_USER == 34, "library value changed");
+static_assert(ERR_NUM_LIBS == 35, "number of libraries changed");
 
 const uint32_t kOpenSSLReasonValues[] = {
     0xc320885,

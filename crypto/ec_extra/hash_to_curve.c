@@ -429,6 +429,25 @@ int EC_hash_to_curve_p256_xmd_sha256_sswu(const EC_GROUP *group, EC_POINT *out,
                                                msg, msg_len);
 }
 
+int ec_hash_to_curve_sm2p256v1_xmd_sm3_sswu(const EC_GROUP *group,
+                                          EC_JACOBIAN *out, const uint8_t *dst,
+                                          size_t dst_len, const uint8_t *msg,
+                                          size_t msg_len){
+  // TODO 
+
+}
+
+int EC_hash_to_curve_sm2p256v1_xmd_sm3_sswu(const EC_GROUP *group, EC_POINT *out, 
+                                            const uint8_t *dst, size_t dst_len, 
+                                            const uint8_t *msg, size_t msg_len) {
+  if (EC_GROUP_cmp(group, out->group, NULL) != 0) {
+    OPENSSL_PUT_ERROR(EC, EC_R_INCOMPATIBLE_OBJECTS);
+    return 0;
+  }
+  return ec_hash_to_curve_sm2p256v1_xmd_sm3_sswu(group, &out->raw, dst, dst_len,
+                                               msg, msg_len);
+}
+
 int ec_hash_to_curve_p384_xmd_sha384_sswu(const EC_GROUP *group,
                                           EC_JACOBIAN *out, const uint8_t *dst,
                                           size_t dst_len, const uint8_t *msg,

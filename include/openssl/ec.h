@@ -118,6 +118,9 @@ OPENSSL_EXPORT const EC_GROUP *EC_group_p224(void);
 // prime256v1.
 OPENSSL_EXPORT const EC_GROUP *EC_group_p256(void);
 
+// sm2p256v1 curve
+OPENSSL_EXPORT const EC_GROUP *EC_group_sm2p256v1(void);
+
 // EC_group_p384 returns an |EC_GROUP| for P-384, also known as secp384r1.
 OPENSSL_EXPORT const EC_GROUP *EC_group_p384(void);
 
@@ -354,6 +357,11 @@ OPENSSL_EXPORT int EC_POINT_mul(const EC_GROUP *group, EC_POINT *r,
 // writes the result to |out|, implementing the P256_XMD:SHA-256_SSWU_RO_ suite
 // from RFC 9380. It returns one on success and zero on error.
 OPENSSL_EXPORT int EC_hash_to_curve_p256_xmd_sha256_sswu(
+    const EC_GROUP *group, EC_POINT *out, const uint8_t *dst, size_t dst_len,
+    const uint8_t *msg, size_t msg_len);
+
+//sm2
+OPENSSL_EXPORT int EC_hash_to_curve_sm2p256v1_xmd_sm3_sswu(
     const EC_GROUP *group, EC_POINT *out, const uint8_t *dst, size_t dst_len,
     const uint8_t *msg, size_t msg_len);
 
