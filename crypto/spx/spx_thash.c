@@ -19,6 +19,7 @@
 #include <string.h>
 
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 
 #include "./spx_params.h"
 #include "./spx_util.h"

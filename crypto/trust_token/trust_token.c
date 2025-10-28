@@ -17,6 +17,7 @@
 #include <openssl/evp.h>
 #include <openssl/mem.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 #include <openssl/trust_token.h>
 
 #include "internal.h"

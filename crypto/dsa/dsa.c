@@ -70,6 +70,7 @@
 #include <openssl/mem.h>
 #include <openssl/rand.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 #include <openssl/thread.h>
 
 #include "internal.h"

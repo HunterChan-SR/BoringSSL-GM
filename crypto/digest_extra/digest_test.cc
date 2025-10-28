@@ -31,6 +31,7 @@
 #include <openssl/nid.h>
 #include <openssl/obj.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 
 #include "../internal.h"
 #include "../test/test_util.h"

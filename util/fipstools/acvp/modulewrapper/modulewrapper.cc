@@ -42,6 +42,7 @@
 #include <openssl/obj.h>
 #include <openssl/rsa.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 #include <openssl/span.h>
 
 #include "../../../../crypto/fipsmodule/ec/internal.h"

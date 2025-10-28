@@ -12,6 +12,7 @@
 #include <openssl/base.h>
 #include <openssl/pki/verify_error.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 
 #include "cert_issuer_source.h"
 #include "certificate_policies.h"

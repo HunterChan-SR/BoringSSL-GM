@@ -27,6 +27,7 @@
 #include <openssl/digest.h>
 #include <openssl/hmac.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 
 #include "bcm_interface.h"
 #include "../internal.h"
@@ -103,6 +104,7 @@
 #include "service_indicator/service_indicator.c.inc"
 #include "sha/sha1.c.inc"
 #include "sha/sha256.c.inc"
+#include "sm3/sm3.c.inc"
 #include "sha/sha512.c.inc"
 #include "tls/kdf.c.inc"
 

@@ -39,7 +39,7 @@ bcm_infallible BCM_sm3_update(SM3_CTX *c, const void *data, size_t len) {
   return bcm_infallible_approved;
 }
 
-bcm_infallible BCM_sm3_final(uint8_t *out, SM3_CTX *c) {
+bcm_infallible BCM_sm3_final(uint8_t out[BCM_SM3_DIGEST_LENGTH], SM3_CTX *c) {
   crypto_md32_final(&sm3_block_data_order, c->h, c->data, SM3_BLOCK_SIZE,
                     &c->num, c->Nh, c->Nl, 1);
   CRYPTO_store_u32_be(out, c->h[0]);

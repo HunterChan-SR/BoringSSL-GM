@@ -16,6 +16,7 @@
 
 #include <openssl/ctrdrbg.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 
 #include "internal.h"
 #include "../../test/file_test.h"

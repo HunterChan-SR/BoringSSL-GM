@@ -28,6 +28,7 @@
 #include <openssl/evp.h>
 #include <openssl/rand.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 #include <openssl/span.h>
 
 #include "../test/file_test.h"

@@ -25,6 +25,7 @@
 #include <openssl/err.h>
 #include <openssl/mem.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 #include <openssl/stack.h>
 
 #include "../crypto/internal.h"

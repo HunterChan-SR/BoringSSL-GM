@@ -29,6 +29,7 @@
 #include <openssl/evp.h>
 #include <openssl/nid.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 
 #include "../test/file_test.h"
 #include "../test/test_util.h"

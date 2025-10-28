@@ -23,6 +23,7 @@
 #include <openssl/md5.h>
 #include <openssl/mem.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 
 #include "../fipsmodule/cipher/internal.h"
 #include "../internal.h"

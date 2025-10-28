@@ -32,6 +32,7 @@
 #include <openssl/mem.h>
 #include <openssl/rand.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 #include <openssl/trust_token.h>
 
 #include "../ec_extra/internal.h"

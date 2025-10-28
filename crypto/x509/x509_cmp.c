@@ -63,6 +63,7 @@
 #include <openssl/md5.h>
 #include <openssl/obj.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 #include <openssl/stack.h>
 #include <openssl/x509.h>
 

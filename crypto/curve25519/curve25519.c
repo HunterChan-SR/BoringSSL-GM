@@ -25,6 +25,7 @@
 #include <openssl/mem.h>
 #include <openssl/rand.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 
 #include "internal.h"
 #include "../internal.h"

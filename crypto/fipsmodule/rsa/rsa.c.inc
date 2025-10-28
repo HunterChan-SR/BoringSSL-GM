@@ -69,6 +69,7 @@
 #include <openssl/mem.h>
 #include <openssl/nid.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 #include <openssl/thread.h>
 
 #include "../bn/internal.h"

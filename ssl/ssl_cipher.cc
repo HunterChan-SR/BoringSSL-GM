@@ -147,6 +147,7 @@
 #include <openssl/md5.h>
 #include <openssl/mem.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 #include <openssl/stack.h>
 
 #include "internal.h"

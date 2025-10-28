@@ -67,6 +67,7 @@
 #include <openssl/nid.h>
 #include <openssl/rand.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 #include <openssl/span.h>
 
 #include "../internal.h"

@@ -11,6 +11,7 @@
 #include <openssl/pki/signature_verify_cache.h>
 #include <openssl/rsa.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 
 #include "cert_errors.h"
 #include "input.h"

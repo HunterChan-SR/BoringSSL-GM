@@ -93,6 +93,7 @@ set(
   crypto/fipsmodule/service_indicator/service_indicator.c.inc
   crypto/fipsmodule/sha/sha1.c.inc
   crypto/fipsmodule/sha/sha256.c.inc
+  crypto/fipsmodule/sm3/sm3.c.inc
   crypto/fipsmodule/sha/sha512.c.inc
   crypto/fipsmodule/tls/kdf.c.inc
 )
@@ -413,6 +414,7 @@ set(
   crypto/rsa_extra/rsa_print.c
   crypto/sha/sha1.c
   crypto/sha/sha256.c
+  crypto/sm3/sm3.c
   crypto/siphash/siphash.c
   crypto/slhdsa/fors.c
   crypto/slhdsa/merkle.c
@@ -586,6 +588,7 @@ set(
   include/openssl/safestack.h
   include/openssl/service_indicator.h
   include/openssl/sha.h
+  include/openssl/sm3.h
   include/openssl/siphash.h
   include/openssl/slhdsa.h
   include/openssl/span.h

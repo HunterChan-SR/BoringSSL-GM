@@ -55,6 +55,7 @@
  * [including the GNU Public Licence.] */
 
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 
 #include <string.h>
 

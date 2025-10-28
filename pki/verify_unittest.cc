@@ -22,6 +22,7 @@
 #include <openssl/pki/verify.h>
 #include <openssl/pki/verify_error.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 
 #include "test_helpers.h"
 

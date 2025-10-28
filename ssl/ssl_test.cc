@@ -38,6 +38,7 @@
 #include <openssl/hpke.h>
 #include <openssl/pem.h>
 #include <openssl/sha.h>
+#include <openssl/sm3.h>
 #include <openssl/ssl.h>
 #include <openssl/rand.h>
 #include <openssl/x509.h>
