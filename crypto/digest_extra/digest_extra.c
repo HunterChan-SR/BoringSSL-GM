@@ -83,6 +83,7 @@ static const struct nid_to_digest nid_to_digest_mapping[] = {
     {NID_sha1, EVP_sha1, SN_sha1, LN_sha1},
     {NID_sha224, EVP_sha224, SN_sha224, LN_sha224},
     {NID_sha256, EVP_sha256, SN_sha256, LN_sha256},
+    {NID_sm3, EVP_sm3, SN_sm3, LN_sm3},
     {NID_sha384, EVP_sha384, SN_sha384, LN_sha384},
     {NID_sha512, EVP_sha512, SN_sha512, LN_sha512},
     {NID_sha512_256, EVP_sha512_256, SN_sha512_256, LN_sha512_256},
@@ -135,6 +136,8 @@ static const struct {
   { {0x2b, 0x0e, 0x03, 0x02, 0x1a}, 5, NID_sha1 },
   // 2.16.840.1.101.3.4.2.1
   { {0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01}, 9, NID_sha256 },
+  // 1.2.156.10197.1.401
+  {{0x2a, 0x81, 0x1c, 0xcf, 0x55, 0x01, 0x83, 0x11}, 8, NID_sm3},
   // 2.16.840.1.101.3.4.2.2
   { {0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x02}, 9, NID_sha384 },
   // 2.16.840.1.101.3.4.2.3

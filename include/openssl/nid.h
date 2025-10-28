@@ -4258,10 +4258,42 @@ extern "C" {
 #define SN_X25519MLKEM768 "X25519MLKEM768"
 #define NID_X25519MLKEM768 965
 
-#define SN_sm3          "SM3"
-#define LN_sm3          "sm3"
-#define NID_sm3         966
-#define OBJ_sm3         OBJ_sm_scheme,401L
+#define SN_ISO_CN "ISO-CN"
+#define LN_ISO_CN "ISO CN Member Body"
+#define NID_ISO_CN 966
+#define OBJ_ISO_CN 1L, 2L, 156L
+
+#define SN_oscca "oscca"
+#define NID_oscca 967
+#define OBJ_oscca OBJ_ISO_CN, 10197L
+
+#define SN_sm_scheme "sm-scheme"
+#define NID_sm_scheme 968
+#define OBJ_sm_scheme OBJ_oscca, 1L
+
+#define SN_sm2 "SM2"
+#define LN_sm2 "sm2"
+#define NID_sm2 969
+#define OBJ_sm2 OBJ_sm_scheme, 301L
+
+#define SN_sm3 "SM3"
+#define LN_sm3 "sm3"
+#define NID_sm3 970
+#define OBJ_sm3 OBJ_sm_scheme, 401L
+
+#define SN_sm3WithRSAEncryption "RSA-SM3"
+#define LN_sm3WithRSAEncryption "sm3WithRSAEncryption"
+#define NID_sm3WithRSAEncryption 971
+#define OBJ_sm3WithRSAEncryption OBJ_sm_scheme, 504L
+
+#define SN_SM2_with_SM3 "SM2-SM3"
+#define LN_SM2_with_SM3 "SM2-with-SM3"
+#define NID_SM2_with_SM3 972
+#define OBJ_SM2_with_SM3 OBJ_sm_scheme, 501L
+
+#define LN_hmacWithSM3 "hmacWithSM3"
+#define NID_hmacWithSM3 973
+#define OBJ_hmacWithSM3 OBJ_sm3, 3L, 1L
 
 #if defined(__cplusplus)
 } /* extern C */

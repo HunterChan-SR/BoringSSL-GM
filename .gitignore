@@ -39,3 +39,5 @@
 target/
 
 .vscode/
+
+MODULE.bazel.lock
