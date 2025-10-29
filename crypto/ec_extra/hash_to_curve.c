@@ -385,7 +385,7 @@ static const uint8_t kP256Sqrt10[] = {
 
 // kP384Sqrt12 is sqrt(12) in P-384's field. It was computed as follows in
 // python3:
-//
+
 // p = 2**384 - 2**128 - 2**96 + 2**32 - 1
 // c2 = pow(12, (p+1)//4, p)
 // assert pow(c2, 2, p) == 12
@@ -395,6 +395,14 @@ static const uint8_t kP384Sqrt12[] = {
     0x83, 0xda, 0x2f, 0xdd, 0x7f, 0x98, 0xe3, 0x83, 0xd6, 0x8b, 0x53, 0x87,
     0x1f, 0x87, 0x2f, 0xcb, 0x9c, 0xcb, 0x80, 0xc5, 0x3c, 0x0d, 0xe1, 0xf8,
     0xa8, 0x0f, 0x7e, 0x19, 0x14, 0xe2, 0xec, 0x69, 0xf5, 0xa6, 0x26, 0xb3};
+
+// p = 2**256 - 2**224 - 2**96 + 2**64 - 1
+// c2 = pow(10, (p+1)//4, p)
+// assert pow(c2, 2, p) == 10
+static const uint8_t KSM2P256Sqrt10[] = {
+    0x22, 0xcc, 0x93, 0xa0, 0x4f, 0x74, 0x2d, 0x49, 0x96, 0x33, 0xe0, 
+    0xf3, 0xa6, 0x0d, 0x22, 0x34, 0x9f, 0xac, 0xce, 0xae, 0xbb, 0xe8, 
+    0x34, 0x92, 0x26, 0x81, 0x2e, 0x65, 0x43, 0xb1, 0x88, 0x1f};
 
 int ec_hash_to_curve_p256_xmd_sha256_sswu(const EC_GROUP *group,
                                           EC_JACOBIAN *out, const uint8_t *dst,
@@ -430,23 +438,63 @@ int EC_hash_to_curve_p256_xmd_sha256_sswu(const EC_GROUP *group, EC_POINT *out,
 }
 
 int ec_hash_to_curve_sm2p256v1_xmd_sm3_sswu(const EC_GROUP *group,
-                                          EC_JACOBIAN *out, const uint8_t *dst,
-                                          size_t dst_len, const uint8_t *msg,
-                                          size_t msg_len){
-  // TODO 
+                                            EC_JACOBIAN *out, const uint8_t *dst,
+                                            size_t dst_len, const uint8_t *msg,
+                                            size_t msg_len) {
+  /* See section 8.3 of RFC 9380 (mapped to SM2 curve / SM3) */
 
+  /* Accept either NID_sm2 (older OpenSSL naming) or NID_sm2p256v1 (some variants). */
+  {
+    int nid = EC_GROUP_get_curve_name(group);
+#if defined(NID_sm2) && defined(NID_sm2p256v1)
+    if (nid != NID_sm2 && nid != NID_sm2p256v1) {
+      OPENSSL_PUT_ERROR(EC, EC_R_GROUP_MISMATCH);
+      return 0;
+    }
+#elif defined(NID_sm2)
+    if (nid != NID_sm2) {
+      OPENSSL_PUT_ERROR(EC, EC_R_GROUP_MISMATCH);
+      return 0;
+    }
+#elif defined(NID_sm2p256v1)
+    if (nid != NID_sm2p256v1) {
+      OPENSSL_PUT_ERROR(EC, EC_R_GROUP_MISMATCH);
+      return 0;
+    }
+#else
+    /* If neither symbol exists at compile time, fall back to runtime acceptance.
+       (This branch is unlikely; keep for maximum portability.) */
+    if (nid == 0) {
+      OPENSSL_PUT_ERROR(EC, EC_R_GROUP_MISMATCH);
+      return 0;
+    }
+#endif
+  }
+
+  /* Z = -10, c2 = sqrt(10) in SM2 field. */
+  EC_FELEM Z, c2;
+  if (!felem_from_u8(group, &Z, 10) ||
+      !ec_felem_from_bytes(group, &c2, KSM2P256Sqrt10, sizeof(KSM2P256Sqrt10))) {
+    return 0;
+  }
+  ec_felem_neg(group, &Z, &Z);
+
+  /* Use SM3 as the XMD hash and k = 128 (same bit-length parameter as P-256 case). */
+  return hash_to_curve(group, EVP_sm3(), &Z, &c2, /*k=*/128, out, dst, dst_len,
+                       msg, msg_len);
 }
 
-int EC_hash_to_curve_sm2p256v1_xmd_sm3_sswu(const EC_GROUP *group, EC_POINT *out, 
-                                            const uint8_t *dst, size_t dst_len, 
+int EC_hash_to_curve_sm2p256v1_xmd_sm3_sswu(const EC_GROUP *group, EC_POINT *out,
+                                            const uint8_t *dst, size_t dst_len,
                                             const uint8_t *msg, size_t msg_len) {
   if (EC_GROUP_cmp(group, out->group, NULL) != 0) {
     OPENSSL_PUT_ERROR(EC, EC_R_INCOMPATIBLE_OBJECTS);
     return 0;
   }
   return ec_hash_to_curve_sm2p256v1_xmd_sm3_sswu(group, &out->raw, dst, dst_len,
-                                               msg, msg_len);
+                                                 msg, msg_len);
 }
+
 
 int ec_hash_to_curve_p384_xmd_sha384_sswu(const EC_GROUP *group,
                                           EC_JACOBIAN *out, const uint8_t *dst,

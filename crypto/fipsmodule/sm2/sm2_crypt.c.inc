@@ -4,7 +4,7 @@
 #include <openssl/asn1t.h>
 #include <openssl/bn.h>
 #include <openssl/bytestring.h>
-#include <openssl/ec.h> 
+#include <openssl/ec.h>
 #include <openssl/err.h>
 #include <openssl/evp.h>
 #include <openssl/mem.h>
@@ -43,7 +43,7 @@ typedef struct SM2_Ciphertext_st {
   ASN1_OCTET_STRING *C2;
 } SM2_Ciphertext;
 
-// 
+//
 DECLARE_ASN1_FUNCTIONS_const(SM2_Ciphertext)
 
 /* -------------------- ASN.1 解析辅助函数 -------------------- */
@@ -125,21 +125,19 @@ SM2_Ciphertext *d2i_SM2_Ciphertext(SM2_Ciphertext **a, const uint8_t **in,
 
 /* 将 SM2_Ciphertext 编码为 ASN.1 格式 */
 int i2d_SM2_Ciphertext(const SM2_Ciphertext *a, uint8_t **outp) {
-  CBB cbb, child;
+  CBB cbb, seq, oct1, oct2;
   CBB_zero(&cbb);
-  
-  if (!CBB_init(&cbb, 0) ||
-      !CBB_add_asn1(&cbb, &child, CBS_ASN1_SEQUENCE) ||
-      !BN_marshal_asn1(&child, a->C1x) ||
-      !BN_marshal_asn1(&child, a->C1y) ||
-      !CBB_add_asn1(&child, &child, CBS_ASN1_OCTETSTRING) ||
-      !CBB_add_bytes(&child, ASN1_STRING_get0_data(a->C3),
+
+  if (!CBB_init(&cbb, 0) || !CBB_add_asn1(&cbb, &seq, CBS_ASN1_SEQUENCE) ||
+      !BN_marshal_asn1(&seq, a->C1x) || !BN_marshal_asn1(&seq, a->C1y) ||
+      !CBB_add_asn1(&seq, &oct1, CBS_ASN1_OCTETSTRING) ||
+      !CBB_add_bytes(&oct1, ASN1_STRING_get0_data(a->C3),
                      ASN1_STRING_length(a->C3)) ||
-      !CBB_add_asn1(&child, &child, CBS_ASN1_OCTETSTRING) ||
-      !CBB_add_bytes(&child, ASN1_STRING_get0_data(a->C2),
+      !CBB_add_asn1(&seq, &oct2, CBS_ASN1_OCTETSTRING) ||
+      !CBB_add_bytes(&oct2, ASN1_STRING_get0_data(a->C2),
                      ASN1_STRING_length(a->C2))) {
     CBB_cleanup(&cbb);
-    OPENSSL_PUT_ERROR(SM2, SM2_R_ASN1_ERROR);    
+    OPENSSL_PUT_ERROR(SM2, SM2_R_ASN1_ERROR);
     return -1;
   }
   return CBB_finish_i2d(&cbb, outp);
@@ -153,11 +151,13 @@ static size_t ec_field_size(const EC_GROUP *group) {
   BIGNUM *b = BN_new();
   size_t field_size = 0;
 
-  if (p == NULL || a == NULL || b == NULL)
+  if (p == NULL || a == NULL || b == NULL) {
     goto done;
+  }
 
-  if (!EC_GROUP_get_curve_GFp(group, p, a, b, NULL))
+  if (!EC_GROUP_get_curve_GFp(group, p, a, b, NULL)) {
     goto done;
+  }
   field_size = (BN_num_bits(p) + 7) / 8;
 
 done:
@@ -177,7 +177,7 @@ done:
 
 /* -------------------- KDF（密钥派生函数）实现 -------------------- */
 
-/* 
+/*
  * SSKDF_hash_kdm 实现了 SM2 的 KDF 算法（等价于 ECDH KDF X9.63）
  * 用于从共享密钥 Z 派生消息掩码
  */
@@ -193,21 +193,25 @@ static int SSKDF_hash_kdm(const EVP_MD *kdf_md, const uint8_t *z, size_t z_len,
   EVP_MD_CTX *ctx = NULL, *ctx_init = NULL;
 
   if (z_len > SSKDF_MAX_INLEN || info_len > SSKDF_MAX_INLEN ||
-      derived_key_len > SSKDF_MAX_INLEN || derived_key_len == 0)
+      derived_key_len > SSKDF_MAX_INLEN || derived_key_len == 0) {
     return 0;
+  }
 
   hlen = EVP_MD_size(kdf_md);
-  if (hlen <= 0)
+  if (hlen <= 0) {
     return 0;
+  }
   out_len = (size_t)hlen;
 
   ctx = EVP_MD_CTX_create();
   ctx_init = EVP_MD_CTX_create();
-  if (ctx == NULL || ctx_init == NULL)
+  if (ctx == NULL || ctx_init == NULL) {
     goto end;
+  }
 
-  if (!EVP_DigestInit(ctx_init, kdf_md))
+  if (!EVP_DigestInit(ctx_init, kdf_md)) {
     goto end;
+  }
 
   for (counter = 1;; counter++) {
     c[0] = (uint8_t)((counter >> 24) & 0xff);
@@ -219,18 +223,22 @@ static int SSKDF_hash_kdm(const EVP_MD *kdf_md, const uint8_t *z, size_t z_len,
           (append_ctr || EVP_DigestUpdate(ctx, c, sizeof(c))) &&
           EVP_DigestUpdate(ctx, z, z_len) &&
           (!append_ctr || EVP_DigestUpdate(ctx, c, sizeof(c))) &&
-          EVP_DigestUpdate(ctx, info, info_len)))
+          EVP_DigestUpdate(ctx, info, info_len))) {
       goto end;
+    }
     if (len >= out_len) {
-      if (!EVP_DigestFinal_ex(ctx, out, NULL))
+      if (!EVP_DigestFinal_ex(ctx, out, NULL)) {
         goto end;
+      }
       out += out_len;
       len -= out_len;
-      if (len == 0)
+      if (len == 0) {
         break;
+      }
     } else {
-      if (!EVP_DigestFinal_ex(ctx, mac, NULL))
+      if (!EVP_DigestFinal_ex(ctx, mac, NULL)) {
         goto end;
+      }
       memcpy(out, mac, len);
       break;
     }
@@ -281,8 +289,9 @@ int SM2_ciphertext_size(const EC_KEY *key, const EVP_MD *digest, size_t msg_len,
   const int md_size = EVP_MD_size(digest);
   size_t sz;
 
-  if (field_size == 0 || md_size < 0)
+  if (field_size == 0 || md_size < 0) {
     return 0;
+  }
 
   /* Integer and string are simple type; set constructed = 0, means primitive
    * and definite length encoding. */
@@ -377,8 +386,9 @@ int SM2_encrypt(const EC_KEY *key, const EVP_MD *digest, const uint8_t *msg,
   x2y2 = OPENSSL_zalloc(2 * field_size);
   C3 = OPENSSL_zalloc(C3_size);
 
-  if (x2y2 == NULL || C3 == NULL)
+  if (x2y2 == NULL || C3 == NULL) {
     goto done;
+  }
 
   memset(ciphertext_buf, 0, *ciphertext_len);
 
@@ -402,8 +412,9 @@ int SM2_encrypt(const EC_KEY *key, const EVP_MD *digest, const uint8_t *msg,
   }
 
   msg_mask = OPENSSL_zalloc(msg_len);
-  if (msg_mask == NULL)
+  if (msg_mask == NULL) {
     goto done;
+  }
 
   /* X9.63 with no salt happens to match the KDF used in SM2 */
   if (!ossl_ecdh_kdf_X9_63(msg_mask, msg_len, x2y2, 2 * field_size, NULL, 0,
@@ -412,8 +423,9 @@ int SM2_encrypt(const EC_KEY *key, const EVP_MD *digest, const uint8_t *msg,
     goto done;
   }
 
-  for (i = 0; i != msg_len; ++i)
+  for (i = 0; i != msg_len; ++i) {
     msg_mask[i] ^= msg[i];
+  }
 
   if (EVP_DigestInit(hash, digest) == 0 ||
       EVP_DigestUpdate(hash, x2y2, field_size) == 0 ||
@@ -496,8 +508,9 @@ int SM2_decrypt(const EC_KEY *key, const EVP_MD *digest,
   int msg_len = 0;
   EVP_MD_CTX *hash = NULL;
 
-  if (field_size == 0 || hash_size <= 0)
+  if (field_size == 0 || hash_size <= 0) {
     goto done;
+  }
 
   memset(ptext_buf, 0xFF, *ptext_len);
 
@@ -540,8 +553,9 @@ int SM2_decrypt(const EC_KEY *key, const EVP_MD *digest,
   x2y2 = OPENSSL_zalloc(2 * field_size);
   computed_C3 = OPENSSL_zalloc(hash_size);
 
-  if (msg_mask == NULL || x2y2 == NULL || computed_C3 == NULL)
+  if (msg_mask == NULL || x2y2 == NULL || computed_C3 == NULL) {
     goto done;
+  }
 
   C1 = EC_POINT_new(group);
   if (C1 == NULL) {
@@ -565,8 +579,9 @@ int SM2_decrypt(const EC_KEY *key, const EVP_MD *digest,
     goto done;
   }
 
-  for (i = 0; i != msg_len; ++i)
+  for (i = 0; i != msg_len; ++i) {
     ptext_buf[i] = C2[i] ^ msg_mask[i];
+  }
 
   hash = EVP_MD_CTX_new();
   if (hash == NULL) {
@@ -594,8 +609,9 @@ int SM2_decrypt(const EC_KEY *key, const EVP_MD *digest,
 done:
   BN_CTX_end(ctx);
 
-  if (rc == 0)
+  if (rc == 0) {
     memset(ptext_buf, 0, *ptext_len);
+  }
 
   OPENSSL_free(msg_mask);
   OPENSSL_free(x2y2);
